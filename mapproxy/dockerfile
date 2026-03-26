@@ -1,0 +1,5 @@
+FROM ghcr.io/mapproxy/mapproxy/mapproxy:1.16.0-nginx@sha256:205a32e557bd4f678a1348a131d4b17019eeb28edbb61def3881e5454a5a80b7
+
+COPY mapproxy.yml /mapproxy/config/mapproxy.yaml
+
+RUN mkdir -p /mapproxy/config/cache_data

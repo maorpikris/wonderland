@@ -1,0 +1,40 @@
+
+services:
+  mapproxy:
+    build:
+      context: ./mapproxy
+      dockerfile: dockerfile
+    container_name: wonderland-mapproxy
+    ports:
+      - "8081:80"
+    volumes:
+      - ./mapproxy/mapproxy.yml:/mapproxy/config/mapproxy.yaml:ro
+      - ./dev_data/mapproxy/cache:/mapproxy/config/cache_data
+      - ./dev_data/mapproxy/maps:/mapproxy/maps
+    networks:
+      - magenim-net
+    restart: unless-stopped
+    depends_on:
+      - geoserver
+
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: magenim-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: magenim
+      POSTGRES_USER: magenim
+      POSTGRES_PASSWORD: magenim
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - magenim-net
+    restart: unless-stopped
+
+networks:
+  magenim-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

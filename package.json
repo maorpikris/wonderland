@@ -1,0 +1,26 @@
+{
+  "name": "magenim",
+  "private": true,
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "backend:build": "pnpm --filter backend build",
+    "backend:start": "pnpm --filter backend start",
+    "frontend:test": "pnpm --filter frontend test",
+    "frontend:test:fast": "pnpm --filter frontend test:fast",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "frontend:build": "pnpm --filter frontend build",
+    "frontend:start": "pnpm --filter frontend start",
+    "test": "pnpm frontend:test",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  },
+  "dependencies": {
+    "lucide-react": "^1.0.1"
+  }
+}
