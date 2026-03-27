@@ -49,7 +49,7 @@ export abstract class BaseCamera implements Camera {
             this.logger.error(
               `Failed to initialize ONVIF for camera ${this.id}: ${err.message}`,
             );
-            // Resolve anyway to prevent blocking application startup
+
             return resolve();
           }
           this.logger.log(`ONVIF initialized for camera ${this.id}`);
@@ -66,7 +66,7 @@ export abstract class BaseCamera implements Camera {
     }
     this.moveTimeout = setTimeout(() => {
       this.stop();
-    }, 600);
+    }, 500);
   }
 
   protected move(pan: number, tilt: number, zoom: number): void {
@@ -144,6 +144,47 @@ export class ThermalPtzCamera extends BaseCamera {
 
   getLowResSource(): string {
     return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif`;
+  }
+
+  move(pan: number, tilt: number, zoom: number): void {
+    if (!this.onvifCam) {
+      this.logger.warn(
+        `Cannot handle move request: ONVIF not initialized for camera ${this.id}`,
+      );
+      return;
+    }
+
+    try {
+      const profileToken =
+        this.onvifCam.activeSource?.profileToken ||
+        this.onvifCam.profiles[0]?.['$']?.token;
+      if (!profileToken) {
+        this.logger.warn(`No active ONVIF profile found for camera ${this.id}`);
+        return;
+      }
+
+      const body: any = {
+        profileToken,
+        x: pan,
+        y: tilt,
+        zoom: zoom,
+      };
+
+      if (zoom == 0) {
+        body.onlySendPanTilt = true;
+      } else {
+        body.onlySendZoom = true;
+      }
+
+      this.onvifCam.continuousMove(body);
+      this.logger.log(
+        `ONVIF continuous move request for camera ${this.id}: ${JSON.stringify(body)}`,
+      );
+    } catch (e: any) {
+      this.logger.error(
+        `ONVIF continuous move error on camera ${this.id}: ${e.message}`,
+      );
+    }
   }
 }
 
