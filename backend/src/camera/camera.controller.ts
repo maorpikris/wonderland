@@ -1,4 +1,12 @@
-import { Controller, Get, Logger, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { CameraService } from './camera.service';
 import { ApiOperation } from '@nestjs/swagger';
@@ -84,5 +92,12 @@ export class CameraController {
     this.logger.log(`Zooming camera ${id} out...`);
     await this.cameraService.moveCamera(id, 0, 0, -1);
     return { success: true };
+  }
+
+  @Patch('/:id')
+  @ApiOperation({ summary: 'update camera metadata' })
+  async patchCamera(@Param('id') id: string, @Body() updateData: any) {
+    this.logger.log(`Patching camera ${id}...`);
+    return this.cameraService.updateCamera(id, updateData);
   }
 }

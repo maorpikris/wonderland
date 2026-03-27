@@ -12,7 +12,7 @@ export type DeviceHealthStatusEnum =
 
 export const DeviceAvailabilityStatusEnum = {
   AVAILABLE: 'AVAILABLE',
-  IN_USE: 'IN_USE',
+  UNAVAILABLE: 'UNAVAILABLE',
 } as const;
 
 export type DeviceAvailabilityStatusEnum =

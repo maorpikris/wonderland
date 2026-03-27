@@ -6,9 +6,10 @@ export const MainPageLayoutOptions = {
   MIXED: 'mixed',
 } as const;
 
-export type MainPageLayoutOptions = (typeof MainPageLayoutOptions)[keyof typeof MainPageLayoutOptions];
+export type MainPageLayoutOptions =
+  (typeof MainPageLayoutOptions)[keyof typeof MainPageLayoutOptions];
 
-export type DevicesAmount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type DevicesAmount = 1 | 2 | 3;
 
 const GRID_COUNT_STORAGE_KEY = 'devices_grid_amount';
 
@@ -23,11 +24,11 @@ const isValidDevicesAmount = (value: unknown): value is DevicesAmount => {
 
 const getInitialDevicesAmount = (): DevicesAmount => {
   const storedValue = localStorage.getItem(GRID_COUNT_STORAGE_KEY);
-  if (!storedValue) return 4;
+  if (!storedValue) return 3;
 
   const parsed = Number(storedValue);
 
-  return isValidDevicesAmount(parsed) ? parsed : 4;
+  return isValidDevicesAmount(parsed) ? parsed : 3;
 };
 
 type MainPageLayoutStore = {
@@ -79,13 +80,13 @@ export const useMainPageLayoutStore = create<MainPageLayoutStore>((set) => ({
       }
     }),
 
-    toggleLeftSidebar: () =>
+  toggleLeftSidebar: () =>
     set((state) => ({ isLeftSidebarOpen: !state.isLeftSidebarOpen })),
 
-    setLeftSidebarOpen: (isOpen) => set({ isLeftSidebarOpen: isOpen }),
+  setLeftSidebarOpen: (isOpen) => set({ isLeftSidebarOpen: isOpen }),
 
-    setDevicesAmount: (devicesAmount) => {
-      localStorage.setItem(GRID_COUNT_STORAGE_KEY, String(devicesAmount));
-      set({ devicesAmount: devicesAmount });
-    },
+  setDevicesAmount: (devicesAmount) => {
+    localStorage.setItem(GRID_COUNT_STORAGE_KEY, String(devicesAmount));
+    set({ devicesAmount: devicesAmount });
+  },
 }));

@@ -8,7 +8,7 @@ import {
 } from '../../stores/useMainPageLayout';
 import { useMapToolsStore } from '../../stores/useMapTools';
 import { mainPageStyles } from './MainPage.css';
-import { LeftSidebar } from './components/LeftSidebar';
+import { LeftSidebar } from '../../components/layout/leftSidebar/LeftSidebar';
 
 export const MainPage = () => {
   const currentLayout = useMainPageLayoutStore((s) => s.currentLayout);
@@ -54,9 +54,13 @@ export const MainPage = () => {
               <Separator className={mainPageStyles.mixedSeparator} />
             ) : null}
 
-            <Panel className={mainPageStyles.mixedPanel} minSize="33%" maxSize="66%">
+            <Panel
+              className={mainPageStyles.mixedPanel}
+              minSize="33%"
+              maxSize="66%"
+            >
               <div className={mainPageStyles.videoGridHost}>
-                <VideoGrid count={devicesAmount}/>
+                <VideoGrid count={devicesAmount} />
               </div>
             </Panel>
           </Group>

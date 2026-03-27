@@ -7,6 +7,12 @@ import { MapControls } from '@components/map/controls';
 import { MeasurementPanel } from '@components/map/controls/MeasurementPanel';
 import { MapToolsOverlay } from '../mapTools/MapToolsOverlay';
 import { subscribeMapResizeToContainer } from '../../utils/mapViewResize';
+import { useMapClickStore } from '../../stores/useMapClick';
+import { CameraLayer } from './CameraLayer';
+
+if (maplibregl.getRTLTextPluginStatus() === 'unavailable') {
+  maplibregl.setRTLTextPlugin('/mapbox-gl-rtl-text.min.js', true);
+}
 
 const MapView = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -37,6 +43,10 @@ const MapView = () => {
       zoom: 7,
     });
 
+    map.on('click', (e) => {
+      useMapClickStore.getState().triggerCallback(e.lngLat.lng, e.lngLat.lat);
+    });
+
     mapRef.current = map;
     setMap(map);
 
@@ -57,6 +67,7 @@ const MapView = () => {
           <MapControls />
           <MeasurementPanel />
           <MapToolsOverlay />
+          <CameraLayer />
         </Box>
       </div>
     </MapProvider>

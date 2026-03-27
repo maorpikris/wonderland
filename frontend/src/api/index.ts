@@ -1,1 +1,1 @@
-export { getCameras } from './cameras.api';
+export { getCameras, updateCamera } from './cameras.api';

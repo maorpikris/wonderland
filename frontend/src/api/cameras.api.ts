@@ -15,3 +15,6 @@ export const rotateLeft = (id: string) => axios.post(`${backendUrl}/cameras/${id
 export const rotateRight = (id: string) => axios.post(`${backendUrl}/cameras/${id}/rotate-right`);
 export const zoomIn = (id: string) => axios.post(`${backendUrl}/cameras/${id}/zoom-in`);
 export const zoomOut = (id: string) => axios.post(`${backendUrl}/cameras/${id}/zoom-out`);
+
+export const updateCamera = (id: string, data: Partial<Camera>) =>
+  axios.patch(`${backendUrl}/cameras/${id}`, data);

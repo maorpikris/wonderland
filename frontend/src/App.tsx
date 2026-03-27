@@ -13,7 +13,6 @@ export default function App() {
     <AppShell
       dir="rtl"
       header={{ height: layout.topbarHeight }}
-      navbar={{ width: layout.rightSidebarWidth, breakpoint: 0 }}
       classNames={{
         header: appShellStyles.header,
         navbar: appShellStyles.navbar,
@@ -21,12 +20,8 @@ export default function App() {
       }}
     >
       <AppShell.Header>
-        <TopbarShell left={left} center={center} right={right}/>
+        <TopbarShell left={left} center={center} right={right} />
       </AppShell.Header>
-
-      <AppShell.Navbar>
-        <RightSidebar />
-      </AppShell.Navbar>
 
       <AppShell.Main>
         <MainContentSwitcher />
