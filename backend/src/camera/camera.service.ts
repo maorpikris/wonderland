@@ -24,6 +24,9 @@ export class CameraService implements OnModuleInit {
       const jsonCameras = JSON.parse(data);
       this.cameras = jsonCameras.map((json: any) => CameraFactory.fromJSON(json));
       this.logger.log(`Loaded ${this.cameras.length} cameras from config`);
+
+      // Initialize ONVIF for all cameras
+      await Promise.all(this.cameras.map((c) => c.initOnvif()));
     } catch (error) {
       this.logger.error(`Failed to load cameras.json: ${error.message}`);
     }
@@ -56,6 +59,22 @@ export class CameraService implements OnModuleInit {
 
   async getAllCameraIds() {
     return this.cameras.map((c) => c.id.toString());
+  }
+
+  async moveCamera(id: string, pan: number, tilt: number, zoom: number) {
+    const camera = this.cameras.find((c) => c.id.toString() === id);
+    if (!camera) {
+      throw new Error(`Camera with ID ${id} not found`);
+    }
+    camera.handleMoveRequest(pan, tilt, zoom);
+  }
+
+  async stopCamera(id: string) {
+    const camera = this.cameras.find((c) => c.id.toString() === id);
+    if (!camera) {
+      throw new Error(`Camera with ID ${id} not found`);
+    }
+    camera.stop();
   }
 
   async getAllCamerasWithData() {

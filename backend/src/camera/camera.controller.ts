@@ -7,9 +7,7 @@ import { ApiOperation } from '@nestjs/swagger';
 export class CameraController {
   private readonly logger = new Logger(CameraController.name);
 
-  constructor(
-    private readonly cameraService: CameraService,
-  ) {}
+  constructor(private readonly cameraService: CameraService) {}
 
   @Get()
   @ApiOperation({ summary: 'get all registered cameras with their data' })
@@ -24,7 +22,6 @@ export class CameraController {
     this.logger.log('Getting all camera IDs...');
     return this.cameraService.getAllCameraIds();
   }
-
 
   @Get('/:id/position')
   @ApiOperation({ summary: 'get current position of a camera' })
@@ -45,6 +42,7 @@ export class CameraController {
   @ApiOperation({ summary: 'move camera up' })
   async moveUp(@Param('id') id: string) {
     this.logger.log(`Moving camera ${id} up...`);
+    await this.cameraService.moveCamera(id, 0, 1, 0);
     return { success: true };
   }
 
@@ -52,6 +50,7 @@ export class CameraController {
   @ApiOperation({ summary: 'move camera down' })
   async moveDown(@Param('id') id: string) {
     this.logger.log(`Moving camera ${id} down...`);
+    await this.cameraService.moveCamera(id, 0, -1, 0);
     return { success: true };
   }
 
@@ -59,6 +58,7 @@ export class CameraController {
   @ApiOperation({ summary: 'rotate camera left' })
   async rotateLeft(@Param('id') id: string) {
     this.logger.log(`Rotating camera ${id} left...`);
+    await this.cameraService.moveCamera(id, -1, 0, 0);
     return { success: true };
   }
 
@@ -66,6 +66,7 @@ export class CameraController {
   @ApiOperation({ summary: 'rotate camera right' })
   async rotateRight(@Param('id') id: string) {
     this.logger.log(`Rotating camera ${id} right...`);
+    await this.cameraService.moveCamera(id, 1, 0, 0);
     return { success: true };
   }
 
@@ -73,6 +74,7 @@ export class CameraController {
   @ApiOperation({ summary: 'zoom in camera' })
   async zoomIn(@Param('id') id: string) {
     this.logger.log(`Zooming camera ${id} in...`);
+    await this.cameraService.moveCamera(id, 0, 0, 1);
     return { success: true };
   }
 
@@ -80,6 +82,7 @@ export class CameraController {
   @ApiOperation({ summary: 'zoom out camera' })
   async zoomOut(@Param('id') id: string) {
     this.logger.log(`Zooming camera ${id} out...`);
+    await this.cameraService.moveCamera(id, 0, 0, -1);
     return { success: true };
   }
 }

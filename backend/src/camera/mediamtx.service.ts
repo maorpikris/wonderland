@@ -23,29 +23,34 @@ export class MediaMTXService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {
-    this.baseUrl = this.configService.get<string>('MEDIAMTX_API_URL') ?? 'http://localhost:9997';
+    this.baseUrl =
+      this.configService.get<string>('MEDIAMTX_API_URL') ??
+      'http://localhost:9997';
   }
 
   async addPath(config: MediaMTXPathConfig): Promise<void> {
     const url = `${this.baseUrl}/v3/config/paths/add/${config.name}`;
     try {
       await firstValueFrom(
-        this.httpService.post(
-          url,
-          {
-            source: config.source,
-            sourceOnDemand: config.sourceOnDemand ?? true,
-          }
-        ),
+        this.httpService.post(url, {
+          source: config.source,
+          sourceOnDemand: config.sourceOnDemand ?? true,
+        }),
       );
       this.logger.log(`Successfully registered path: ${config.name}`);
     } catch (error) {
-      if (error.response?.status === 400 && error.response?.data?.error?.includes('already exists')) {
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.error?.includes('already exists')
+      ) {
         this.logger.warn(`Path ${config.name} already exists in MediaMTX`);
         return;
       }
 
-      this.logger.error(`Failed to register path ${config.name}: ${error.message}`, error.stack);
+      this.logger.error(
+        `Failed to register path ${config.name}: ${error.message}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -53,9 +58,7 @@ export class MediaMTXService {
   async listPaths(): Promise<any> {
     const url = `${this.baseUrl}/v3/paths/list`;
     try {
-      const response = await firstValueFrom(
-        this.httpService.get(url),
-      );
+      const response = await firstValueFrom(this.httpService.get(url));
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to list paths: ${error.message}`);
