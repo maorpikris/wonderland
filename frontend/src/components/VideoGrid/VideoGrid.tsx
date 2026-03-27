@@ -40,6 +40,7 @@ const VideoGrid = ({ count = 3 }: VideoGridProps) => {
                 bottomBarContent={({ toggleFullscreen, onPopOverToggle }) => (
                   <MeansActionBar
                     slotIndex={i}
+                    cameraId={camera.id}
                     toggleFullscreen={toggleFullscreen}
                     onPopOverToggle={onPopOverToggle}
                   />

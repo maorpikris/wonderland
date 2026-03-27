@@ -14,6 +14,11 @@ export const videoTile = style({
   width: '100%',
   height: '100%',
   overflow: 'hidden',
+  selectors: {
+    '&.is-popover-open': {
+      overflow: 'visible',
+    },
+  },
 });
 
 export const videoTileBar = style({

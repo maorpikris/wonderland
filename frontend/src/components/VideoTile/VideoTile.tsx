@@ -19,13 +19,13 @@ type VideoTileProps = {
 };
 
 const VideoTile = ({ streamUrl, topBarContent, bottomBarContent }: VideoTileProps) => {
-  const { ref, toggle } = useFullscreen();
+  const { ref, toggle, fullscreen } = useFullscreen();
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
 
   return (
     <div
       ref={ref}
-      className={clsx(videoTile, isPopOverOpen && 'is-popover-open')}
+      className={clsx(videoTile, isPopOverOpen && 'is-popover-open', fullscreen && 'is-fullscreen')}
     >
       <WebRtcVideo className={videoTileVideo} streamUrl={streamUrl} />
 

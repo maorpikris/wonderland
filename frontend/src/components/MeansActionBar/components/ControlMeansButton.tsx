@@ -1,11 +1,49 @@
-import { GameControllerIcon } from '@phosphor-icons/react';
+import { GameController } from '@phosphor-icons/react';
+import { Popover } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import MeansActionButton from './MeansActionButton';
+import PTZControl from './PTZControl/PTZControl';
 
-const ControlMeansButton = () => {
+type ControlMeansButtonProps = {
+  cameraId: string;
+  onPopOverToggle: (opened: boolean) => void;
+};
+
+const ControlMeansButton = ({ cameraId, onPopOverToggle }: ControlMeansButtonProps) => {
+  const [opened, { close, toggle }] = useDisclosure(false, {
+    onOpen: () => onPopOverToggle(true),
+    onClose: () => onPopOverToggle(false),
+  });
+
   return (
-    <MeansActionButton>
-      <GameControllerIcon size={15} />
-    </MeansActionButton>
+    <Popover
+      opened={opened}
+      onClose={close}
+      position="top-start"
+      offset={10}
+      shadow="md"
+      withinPortal={false}
+      styles={{
+        dropdown: {
+          padding: 0,
+          border: 'none',
+          backgroundColor: 'transparent',
+          zIndex: 1000,
+        }
+      }}
+    >
+      <Popover.Target>
+        <div style={{ display: 'inline-block' }}>
+          <MeansActionButton onClick={toggle}>
+            <GameController size={15} />
+          </MeansActionButton>
+        </div>
+      </Popover.Target>
+
+      <Popover.Dropdown>
+        <PTZControl cameraId={cameraId} />
+      </Popover.Dropdown>
+    </Popover>
   );
 };
 

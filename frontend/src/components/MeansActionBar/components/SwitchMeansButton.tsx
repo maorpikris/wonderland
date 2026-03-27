@@ -45,7 +45,7 @@ const SwitchMeansButton = ({ slotIndex, onPopOverToggle }: SwitchMeansButtonProp
       position="top" 
       offset={10}
       shadow="md"
-      withinPortal={true}
+      withinPortal={false}
       styles={{
         dropdown: {
           padding: 0,

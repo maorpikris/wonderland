@@ -7,12 +7,14 @@ import {
 
 type MeansActionBarProps = {
   slotIndex: number;
+  cameraId: string;
   toggleFullscreen: () => void;
   onPopOverToggle: (opened: boolean) => void;
 };
 
 const MeansActionBar = ({
   slotIndex,
+  cameraId,
   toggleFullscreen,
   onPopOverToggle,
 }: MeansActionBarProps) => {
@@ -26,7 +28,7 @@ const MeansActionBar = ({
       wrap="wrap"
       p="0 12px"
     >
-      <ControlMeansButton />
+      <ControlMeansButton cameraId={cameraId} onPopOverToggle={onPopOverToggle} />
       <FullscreenMeansButton toggleFullscreen={toggleFullscreen} />
       <SwitchMeansButton slotIndex={slotIndex} onPopOverToggle={onPopOverToggle} />
     </Flex>
