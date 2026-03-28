@@ -27,7 +27,6 @@ export function LeftSidebar() {
 
   return (
     <Box className={leftSidebarStyles.root}>
-      <Text className={leftSidebarStyles.header}>מצלמות</Text>
       <ScrollArea
         className={leftSidebarStyles.scrollArea}
         scrollbars="y"

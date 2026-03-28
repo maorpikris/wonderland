@@ -55,16 +55,20 @@ export const SpotLayer = ({ onSpotClick }: SpotLayerProps) => {
         const label = document.createElement('div');
         label.innerText = spot.name;
         label.style.position = 'absolute';
-        label.style.top = '-20px';
+        label.style.top = '-30px';
         label.style.left = '50%';
         label.style.transform = 'translateX(-50%)';
-        label.style.background = 'rgba(0, 0, 0, 0)';
+        label.style.background = 'rgba(20, 31, 50, 0.75)';
         label.style.color = 'white';
-        label.style.padding = '2px 6px';
-        label.style.borderRadius = '4px';
+        label.style.padding = '2px 8px';
+        label.style.borderRadius = '6px';
         label.style.fontSize = '12px';
+        label.style.fontWeight = '700';
         label.style.whiteSpace = 'nowrap';
         label.style.pointerEvents = 'none';
+        label.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+        label.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
+
         el.appendChild(label);
 
         const marker = new maplibregl.Marker({ element: el })
