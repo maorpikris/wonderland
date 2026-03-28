@@ -18,6 +18,7 @@ export class CameraService implements OnModuleInit {
   private cameraEntities: Map<number, CameraEntity> = new Map();
   private cameraAvailability: Map<string, DeviceAvailabilityStatusEnum> =
     new Map();
+  private registeredCameraIds: Set<number> = new Set();
 
   constructor(
     private readonly mediamtxService: MediaMTXService,
@@ -77,6 +78,8 @@ export class CameraService implements OnModuleInit {
 
   private async registerCamerasWithMediaMTX() {
     for (const camera of this.cameras) {
+      if (this.registeredCameraIds.has(camera.id)) continue;
+
       try {
         const highResPath = `${camera.id}_high`;
         const lowResPath = `${camera.id}_low`;
@@ -121,6 +124,7 @@ export class CameraService implements OnModuleInit {
           });
         }
 
+        this.registeredCameraIds.add(camera.id);
         this.logger.log(
           `Registered MediaMTX paths for camera ${camera.id} (thermal: ${camera.hasThermal()})`,
         );
@@ -129,6 +133,16 @@ export class CameraService implements OnModuleInit {
           `Failed to register camera ${camera.id} with MediaMTX: ${error.message}`,
         );
       }
+    }
+  }
+
+  @Interval(10000)
+  async retryFailedRegistrations() {
+    if (this.registeredCameraIds.size < this.cameras.length) {
+      this.logger.debug(
+        `Checking for unregistered cameras (${this.registeredCameraIds.size}/${this.cameras.length})...`,
+      );
+      await this.registerCamerasWithMediaMTX();
     }
   }
 

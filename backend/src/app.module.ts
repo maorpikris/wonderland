@@ -19,7 +19,7 @@ import DHCPService from './dhcp';
       serveRoot: '/static',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'recordings'),
+      rootPath: join(process.cwd(), 'recordings'),
       serveRoot: '/recordings',
     }),
     CameraModule,

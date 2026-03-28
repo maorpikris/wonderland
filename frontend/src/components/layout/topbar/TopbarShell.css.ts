@@ -67,7 +67,7 @@ export const topBarShellStyles = {
     fontWeight: 'bold',
     lineHeight: '1.2',
     letterSpacing: '1px',
-    color: '  #ffe9c9ff',
+    color: '  #cbe7ffff',
   }),
   logo: style({
     height: '40px',

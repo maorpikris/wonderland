@@ -18,6 +18,8 @@ export class PlaybackService {
   private readonly storageBaseUrl: string;
   private readonly appBaseUrl: string;
 
+  private readonly recordingsPath: string;
+
   constructor(private readonly configService: ConfigService) {
     this.mediamtxPlaybackUrl =
       this.configService.get<string>('MEDIAMTX_PLAYBACK_URL') ||
@@ -26,6 +28,9 @@ export class PlaybackService {
       this.configService.get<string>('STORAGE_BASE_URL') ||
       'http://localhost:3000/static';
     this.appBaseUrl = this.storageBaseUrl.replace('/static', '');
+    this.recordingsPath =
+      this.configService.get<string>('RECORDINGS_PATH') ||
+      path.join(process.cwd(), 'recordings');
   }
 
   async getPlayback(
@@ -53,14 +58,7 @@ export class PlaybackService {
 
       // Helper function to find a file in the directory that matches the start time
       const resolveFileUrl = (channelPath: string, isoStart: string) => {
-        const baseDir = path.resolve(
-          __dirname,
-          '..',
-          '..',
-          '..',
-          'recordings',
-          channelPath,
-        );
+        const baseDir = path.join(this.recordingsPath, channelPath);
         if (!fs.existsSync(baseDir)) return null;
 
         const files = fs.readdirSync(baseDir);
@@ -159,10 +157,10 @@ export class PlaybackService {
     const thermalHighPath = `thermal_${cameraId}_high`;
     const thermalLowPath = `thermal_${cameraId}_low`;
 
-    const highDir = path.resolve(__dirname, '..', '..', '..', 'recordings', highPath);
-    const lowDir = path.resolve(__dirname, '..', '..', '..', 'recordings', lowPath);
-    const thermalHighDir = path.resolve(__dirname, '..', '..', '..', 'recordings', thermalHighPath);
-    const thermalLowDir = path.resolve(__dirname, '..', '..', '..', 'recordings', thermalLowPath);
+    const highDir = path.join(this.recordingsPath, highPath);
+    const lowDir = path.join(this.recordingsPath, lowPath);
+    const thermalHighDir = path.join(this.recordingsPath, thermalHighPath);
+    const thermalLowDir = path.join(this.recordingsPath, thermalLowPath);
 
     const parseFilename = (filename: string) => {
       const nameWithoutExt = filename.replace('.mp4', '');
