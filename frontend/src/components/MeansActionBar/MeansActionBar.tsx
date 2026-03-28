@@ -3,6 +3,7 @@ import {
   ControlMeansButton,
   FullscreenMeansButton,
   SwitchMeansButton,
+  ReplayMeansButton,
 } from './components';
 
 type MeansActionBarProps = {
@@ -28,9 +29,19 @@ const MeansActionBar = ({
       wrap="wrap"
       p="0 12px"
     >
-      <ControlMeansButton cameraId={cameraId} onPopOverToggle={onPopOverToggle} />
+      <ControlMeansButton
+        cameraId={cameraId}
+        onPopOverToggle={onPopOverToggle}
+      />
+      <ReplayMeansButton
+        slotIndex={slotIndex}
+        onPopOverToggle={onPopOverToggle}
+      />
       <FullscreenMeansButton toggleFullscreen={toggleFullscreen} />
-      <SwitchMeansButton slotIndex={slotIndex} onPopOverToggle={onPopOverToggle} />
+      <SwitchMeansButton
+        slotIndex={slotIndex}
+        onPopOverToggle={onPopOverToggle}
+      />
     </Flex>
   );
 };

@@ -18,3 +18,17 @@ export const zoomOut = (id: string) => axios.post(`${backendUrl}/cameras/${id}/z
 
 export const updateCamera = (id: string, data: Partial<Camera>) =>
   axios.patch(`${backendUrl}/cameras/${id}`, data);
+
+export const getRecordings = async (
+  id: string,
+  start?: string,
+  end?: string,
+) => {
+  const params = new URLSearchParams();
+  if (start) params.append('start', start);
+  if (end) params.append('end', end);
+  const response = await axios.get(
+    `${backendUrl}/cameras/${id}/recordings?${params.toString()}`,
+  );
+  return response.data;
+};

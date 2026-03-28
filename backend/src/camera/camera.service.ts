@@ -188,4 +188,25 @@ export class CameraService implements OnModuleInit {
       };
     });
   }
+
+  async getRecordings(id: string, start?: string, end?: string) {
+    const highPath = `${id}_high`;
+    const lowPath = `${id}_low`;
+
+    let high = [];
+    try {
+      high = await this.mediamtxService.listRecordings(highPath, start, end);
+    } catch (error) {
+      this.logger.warn(`Could not fetch high recordings for ${id}`);
+    }
+
+    let low = [];
+    try {
+      low = await this.mediamtxService.listRecordings(lowPath, start, end);
+    } catch (error) {
+      this.logger.warn(`Could not fetch low recordings for ${id}`);
+    }
+
+    return { high, low };
+  }
 }

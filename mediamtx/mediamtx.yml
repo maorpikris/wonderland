@@ -10,16 +10,24 @@ paths:
 api: yes
 apiAddress: :9997
 
+playback: true
+playbackAddress: :9996
+playbackEncryption: false
+playbackServerKey: server.key
+playbackServerCert: server.crt
+playbackAllowOrigins: ['*']
+playbackTrustedProxies: []
+
 # WebRTC settings
 webrtc: true
-webrtcAddress: ":8889"
+webrtcAddress: ':8889'
 webrtcEncryption: false
 webrtcServerKey: server.key
 webrtcServerCert: server.crt
-webrtcAllowOrigins: ["*"]
+webrtcAllowOrigins: ['*']
 webrtcTrustedProxies: []
-webrtcLocalUDPAddress: ":8189"
-webrtcLocalTCPAddress: ":8199"
+webrtcLocalUDPAddress: ':8189'
+webrtcLocalTCPAddress: ':8199'
 webrtcIPsFromInterfaces: true
 webrtcIPsFromInterfacesList: []
 webrtcAdditionalHosts: []

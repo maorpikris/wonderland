@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getSelfLocation, updateSelfLocation, type SelfLocation } from '../api/selfLocation.api';
+import { getSelfLocation, updateSelfLocation } from '../api/selfLocation.api';
 
 const SELF_LOCATION_QUERY_KEY = ['selfLocation'];
 

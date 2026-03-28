@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { CameraService } from './camera.service';
@@ -99,5 +100,16 @@ export class CameraController {
   async patchCamera(@Param('id') id: string, @Body() updateData: any) {
     this.logger.log(`Patching camera ${id}...`);
     return this.cameraService.updateCamera(id, updateData);
+  }
+
+  @Get('/:id/recordings')
+  @ApiOperation({ summary: 'get available recordings timespans for a camera' })
+  async getRecordings(
+    @Param('id') id: string,
+    @Query('start') start?: string,
+    @Query('end') end?: string,
+  ) {
+    this.logger.log(`Getting recordings for camera ${id}...`);
+    return this.cameraService.getRecordings(id, start, end);
   }
 }

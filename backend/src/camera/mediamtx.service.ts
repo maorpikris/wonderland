@@ -45,9 +45,10 @@ export class MediaMTXService {
           record: config.record ?? false,
           recordPath: config.recordPath,
           recordFormat: config.recordFormat ?? 'fmp4',
-          recordPartDuration: config.recordPartDuration ?? '1s',
-          recordSegmentDuration: config.recordSegmentDuration ?? '1h',
+          recordPartDuration: config.recordPartDuration ?? '10s',
+          recordSegmentDuration: config.recordSegmentDuration ?? '10m',
           recordDeleteAfter: config.recordDeleteAfter ?? '10d',
+          playback: true,
         }),
       );
       this.logger.log(`Successfully registered path: ${config.name}`);
@@ -75,6 +76,30 @@ export class MediaMTXService {
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to list paths: ${error.message}`);
+      throw error;
+    }
+  }
+
+  async listRecordings(
+    path: string,
+    start?: string,
+    end?: string,
+  ): Promise<any> {
+    const playbackUrl =
+      this.configService.get<string>('MEDIAMTX_PLAYBACK_URL') ??
+      'http://localhost:9996';
+    const params = new URLSearchParams({ path });
+    if (start) params.append('start', start);
+    if (end) params.append('end', end);
+
+    const url = `${playbackUrl}/list?${params.toString()}`;
+    try {
+      const response = await firstValueFrom(this.httpService.get(url));
+      return response.data;
+    } catch (error) {
+      this.logger.error(
+        `Failed to list recordings for path ${path}: ${error.message}`,
+      );
       throw error;
     }
   }

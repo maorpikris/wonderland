@@ -3,7 +3,6 @@ import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import { fileURLToPath, URL } from 'node:url';
-import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   resolve: {
