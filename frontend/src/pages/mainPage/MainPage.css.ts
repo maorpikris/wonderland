@@ -11,7 +11,7 @@ const pageGrid = style({
 
 export const mainPageStyles = {
   withLeftSidebar: `${pageGrid} ${style({
-    gridTemplateColumns: '1fr 280px',
+    gridTemplateColumns: '1fr 220px',
   })}`,
 
   withoutLeftSidebar: `${pageGrid} ${style({

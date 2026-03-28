@@ -24,6 +24,7 @@ interface Recording {
   duration: number;
   url: string;
   quality?: 'high' | 'low';
+  isThermal?: boolean;
 }
 
 type GroupedRecordings = Record<string, Recording[]>;
@@ -217,6 +218,13 @@ export const ReplayModal = ({
                                           high res
                                         </Badge>
                                       )}
+                                      <Badge
+                                        size="xs"
+                                        color={seg.isThermal ? 'grape' : 'yellow'}
+                                        variant="filled"
+                                      >
+                                        {seg.isThermal ? 'תרמי' : 'יום'}
+                                      </Badge>
                                     </Group>
                                     <Text size="xs" c="dimmed">
                                       משך: {formatDuration(seg.duration)}
@@ -285,6 +293,8 @@ export const ReplayModal = ({
                   <Badge color="dark" variant="filled" opacity={0.7} size="lg">
                     {dayjs(activeRecording.start).format('DD/MM/YYYY HH:mm:ss')}{' '}
                     (
+                    {activeRecording.isThermal ? 'Thermal' : 'Day'}
+                    {' - '}
                     {activeRecording.quality === 'high'
                       ? 'High Res'
                       : 'Standard'}

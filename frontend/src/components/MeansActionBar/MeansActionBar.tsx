@@ -4,7 +4,9 @@ import {
   FullscreenMeansButton,
   SwitchMeansButton,
   ReplayMeansButton,
+  ThermalMeansButton,
 } from './components';
+import { useCameras } from '@hooks/useCameras';
 
 type MeansActionBarProps = {
   slotIndex: number;
@@ -19,6 +21,10 @@ const MeansActionBar = ({
   toggleFullscreen,
   onPopOverToggle,
 }: MeansActionBarProps) => {
+  const { data: cameras } = useCameras();
+  const camera = cameras?.find((c) => c.id === cameraId);
+  const hasThermal = camera?.hasThermal || false;
+
   return (
     <Flex
       mih={50}
@@ -43,6 +49,7 @@ const MeansActionBar = ({
         slotIndex={slotIndex}
         onPopOverToggle={onPopOverToggle}
       />
+      {hasThermal && <ThermalMeansButton slotIndex={slotIndex} />}
     </Flex>
   );
 };

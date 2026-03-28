@@ -4,7 +4,6 @@ import {
   Badge,
   Text,
   Button,
-  Group,
   Stack,
   ScrollArea,
 } from '@mantine/core';
@@ -12,6 +11,9 @@ import { useCameras } from '@src/hooks/useCameras';
 import { CameraEditModal } from '../../camera/CameraEditModal';
 import { useState } from 'react';
 import type { Camera } from '@src/types';
+import { leftSidebarStyles } from './LeftSidebar.css';
+import { Cctv, Thermometer } from 'lucide-react';
+import { colors } from '../../../theme/tokens.css';
 
 export function LeftSidebar() {
   const { data: cameras, isLoading } = useCameras();
@@ -24,51 +26,95 @@ export function LeftSidebar() {
   };
 
   return (
-    <Box p="md" h="100%" dir="rtl">
-      <Text size="xl" fw={700} mb="lg">
-        מצלמות
-      </Text>
-      <ScrollArea h="calc(100vh - 120px)">
-        <Stack gap="md">
-          {isLoading && <Text>טוען מצלמות...</Text>}
-          {cameras?.map((camera) => (
-            <Card
-              key={camera.id}
-              shadow="sm"
-              padding="md"
-              radius="md"
-              withBorder
-            >
-              <Group justify="space-between" mb="xs">
-                <Text fw={600} size="md">
-                  {camera.name}
-                </Text>
-                <Badge 
-                  color={camera.availability === 'AVAILABLE' ? 'green' : 'red'} 
-                  variant="light" 
-                  size="sm"
-                >
-                  {camera.availability === 'AVAILABLE' ? 'זמין' : 'זמין בחלקיות / לא זמין'}
-                </Badge>
-              </Group>
-
-              <Text size="xs" c="dimmed">
-                ID: {camera.id}
-              </Text>
-
-              <Button
-                variant="filled"
-                color="blue"
-                fullWidth
-                mt="md"
-                radius="md"
-                size="xs"
-                onClick={() => handleEdit(camera)}
+    <Box className={leftSidebarStyles.root}>
+      <Text className={leftSidebarStyles.header}>מצלמות</Text>
+      <ScrollArea
+        className={leftSidebarStyles.scrollArea}
+        scrollbars="y"
+        type="hover"
+      >
+        <Stack gap="xs">
+          {isLoading && (
+            <Text c="dimmed" ta="center" mt="xl">
+              טוען מצלמות...
+            </Text>
+          )}
+          {!isLoading && cameras?.length === 0 && (
+            <Text c="dimmed" ta="center" mt="xl">
+              לא נמצאו מצלמות
+            </Text>
+          )}
+          {cameras?.map((camera) => {
+            const isDisconnected = camera.availability === 'UNAVAILABLE';
+            return (
+              <Card
+                key={camera.id}
+                className={leftSidebarStyles.card}
+                onClick={isDisconnected ? undefined : () => handleEdit(camera)}
+                style={{
+                  opacity: isDisconnected ? 0.5 : 1,
+                  pointerEvents: isDisconnected ? 'none' : 'auto',
+                  cursor: isDisconnected ? 'not-allowed' : 'pointer',
+                }}
               >
-                ערוך
-              </Button>
-            </Card>
-          ))}
+                <div className={leftSidebarStyles.cardHeader}>
+                  <div style={{ flex: 1 }}>
+                    <h3 className={leftSidebarStyles.cameraName}>
+                      {camera.name}
+                    </h3>
+                    <div className={leftSidebarStyles.cameraId}>
+                      ID: {camera.id}
+                    </div>
+                  </div>
+                  <Cctv
+                    size={18}
+                    color={colors.accent9}
+                    style={{ opacity: 0.7 }}
+                  />
+                </div>
+
+                <div className={leftSidebarStyles.badgeContainer}>
+                  {/* Availability Badge */}
+                  <Badge
+                    variant="filled"
+                    color={camera.availability === 'AVAILABLE' ? 'teal' : 'red'}
+                    className={leftSidebarStyles.badge}
+                    size="xs"
+                  >
+                    {camera.availability === 'AVAILABLE' ? 'זמין' : 'מנותק'}
+                  </Badge>
+
+                  {/* Thermal Badge */}
+                  {camera.hasThermal && (
+                    <Badge
+                      variant="light"
+                      color="orange"
+                      className={leftSidebarStyles.badge}
+                      size="xs"
+                      leftSection={<Thermometer size={10} />}
+                    >
+                      תרמית
+                    </Badge>
+                  )}
+                </div>
+
+                <Button
+                  variant="subtle"
+                  fullWidth
+                  size="xs"
+                  radius="md"
+                  className={leftSidebarStyles.editButton}
+                  disabled={isDisconnected}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(camera);
+                  }}
+                >
+                  פרטים ועריכה
+                </Button>
+              </Card>
+            );
+          })}
         </Stack>
       </ScrollArea>
 

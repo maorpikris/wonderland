@@ -12,6 +12,9 @@ export interface Camera {
   onvifPort?: number;
   getHighResSource(): string;
   getLowResSource(): string;
+  getThermalHighResSource(): string;
+  getThermalLowResSource(): string;
+  hasThermal(): boolean;
   initOnvif(): Promise<void>;
   handleMoveRequest(pan: number, tilt: number, zoom: number): void;
   getPTZStatus(): Promise<{ pan: number; zoom: number } | null>;
@@ -36,6 +39,18 @@ export abstract class BaseCamera implements Camera {
 
   abstract getHighResSource(): string;
   abstract getLowResSource(): string;
+
+  getThermalHighResSource(): string {
+    return '';
+  }
+
+  getThermalLowResSource(): string {
+    return '';
+  }
+
+  hasThermal(): boolean {
+    return false;
+  }
 
   async initOnvif(): Promise<void> {
     if (this.isInitializing || this.onvifCam) return;
@@ -208,6 +223,18 @@ export class ThermalPtzCamera extends BaseCamera {
   calculateFOV(zoom: number): number {
     // Thermal camera often have different lenses and FOV parameters
     return calculateFOV(zoom, 3.2, 7.5, 7.5, 1); // Mocked values for thermal
+  }
+
+  hasThermal(): boolean {
+    return true;
+  }
+
+  getThermalHighResSource(): string {
+    return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=2&subtype=0&unicast=true&proto=Onvif`;
+  }
+
+  getThermalLowResSource(): string {
+    return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=2&subtype=1&unicast=true&proto=Onvif`;
   }
 
   move(pan: number, tilt: number, zoom: number): void {

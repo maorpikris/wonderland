@@ -21,11 +21,11 @@ export class CameraGateway implements OnGatewayInit {
     this.logger.log('Camera WebSocket Gateway initialized');
   }
 
-  broadcastCameraUpdate(data: {
-    id: string;
-    azimuth: number;
-    fov: number;
-  }) {
+  broadcastCameraUpdate(data: { id: string; azimuth: number; fov: number }) {
     this.server.emit('cameraUpdate', data);
+  }
+
+  broadcastCameraStatusUpdate(data: { id: string; availability: string }) {
+    this.server.emit('cameraStatusUpdate', data);
   }
 }

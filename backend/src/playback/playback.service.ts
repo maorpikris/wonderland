@@ -156,9 +156,13 @@ export class PlaybackService {
   async listRecordings(cameraId: string, date: string) {
     const highPath = `${cameraId}_high`;
     const lowPath = `${cameraId}_low`;
+    const thermalHighPath = `thermal_${cameraId}_high`;
+    const thermalLowPath = `thermal_${cameraId}_low`;
 
     const highDir = path.resolve(__dirname, '..', '..', '..', 'recordings', highPath);
     const lowDir = path.resolve(__dirname, '..', '..', '..', 'recordings', lowPath);
+    const thermalHighDir = path.resolve(__dirname, '..', '..', '..', 'recordings', thermalHighPath);
+    const thermalLowDir = path.resolve(__dirname, '..', '..', '..', 'recordings', thermalLowPath);
 
     const parseFilename = (filename: string) => {
       const nameWithoutExt = filename.replace('.mp4', '');
@@ -174,7 +178,7 @@ export class PlaybackService {
       return { iso, ms: new Date(iso).getTime(), hour: sub[0] };
     };
 
-    const getSegments = (dir: string, channelPath: string, quality: 'high' | 'low') => {
+    const getSegments = (dir: string, channelPath: string, quality: 'high' | 'low', isThermal: boolean = false) => {
       if (!fs.existsSync(dir)) return [];
       const files = fs.readdirSync(dir)
         .filter((f) => f.startsWith(date) && f.endsWith('.mp4'))
@@ -206,13 +210,16 @@ export class PlaybackService {
           duration,
           url: `${this.appBaseUrl}/recordings/${channelPath}/${filename}`,
           quality,
+          isThermal,
         };
-      }).filter(Boolean) as MediaMTXRecordingSegment[];
+      }).filter(Boolean) as (MediaMTXRecordingSegment & { isThermal: boolean })[];
     };
 
     const allSegments = [
-      ...getSegments(highDir, highPath, 'high'),
-      ...getSegments(lowDir, lowPath, 'low'),
+      ...getSegments(highDir, highPath, 'high', false),
+      ...getSegments(lowDir, lowPath, 'low', false),
+      ...getSegments(thermalHighDir, thermalHighPath, 'high', true),
+      ...getSegments(thermalLowDir, thermalLowPath, 'low', true),
     ];
 
     const grouped: Record<string, MediaMTXRecordingSegment[]> = {};

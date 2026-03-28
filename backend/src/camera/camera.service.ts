@@ -16,6 +16,8 @@ export class CameraService implements OnModuleInit {
   private readonly logger = new Logger(CameraService.name);
   private cameras: Camera[] = [];
   private cameraEntities: Map<number, CameraEntity> = new Map();
+  private cameraAvailability: Map<string, DeviceAvailabilityStatusEnum> =
+    new Map();
 
   constructor(
     private readonly mediamtxService: MediaMTXService,
@@ -28,6 +30,9 @@ export class CameraService implements OnModuleInit {
   async onModuleInit() {
     await this.loadCameras();
     await this.registerCamerasWithMediaMTX();
+    this.checkMediaMTXAvailability().catch((e) =>
+      this.logger.error(`Initial availability check failed: ${e.message}`),
+    );
   }
 
   private async loadCameras() {
@@ -95,8 +100,29 @@ export class CameraService implements OnModuleInit {
           recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
         });
 
+        if (camera.hasThermal()) {
+          const thermalHighResPath = `thermal_${camera.id}_high`;
+          const thermalLowResPath = `thermal_${camera.id}_low`;
+
+          await this.mediamtxService.addPath({
+            name: thermalHighResPath,
+            source: camera.getThermalHighResSource(),
+            sourceOnDemand: true,
+            record: true,
+            recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
+          });
+
+          await this.mediamtxService.addPath({
+            name: thermalLowResPath,
+            source: camera.getThermalLowResSource(),
+            sourceOnDemand: false,
+            record: true,
+            recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
+          });
+        }
+
         this.logger.log(
-          `Registered MediaMTX paths for camera ${camera.id} from type ${camera.type}`,
+          `Registered MediaMTX paths for camera ${camera.id} (thermal: ${camera.hasThermal()})`,
         );
       } catch (error) {
         this.logger.error(
@@ -174,39 +200,86 @@ export class CameraService implements OnModuleInit {
     }
   }
 
+  @Interval(5000)
+  async checkMediaMTXAvailability() {
+    try {
+      const pathsData = await this.mediamtxService.listPaths();
+      const pathItems = pathsData?.items || [];
+
+      for (const camera of this.cameras) {
+        const id = camera.id.toString();
+        const lowResPathName = `${id}_low`;
+        const pathInfo = pathItems.find((p: any) => p.name === lowResPathName);
+
+        const currentStatus =
+          pathInfo?.ready === true
+            ? DeviceAvailabilityStatusEnum.AVAILABLE
+            : DeviceAvailabilityStatusEnum.UNAVAILABLE;
+
+        const previousStatus = this.cameraAvailability.get(id);
+
+        if (currentStatus !== previousStatus) {
+          this.cameraAvailability.set(id, currentStatus);
+          this.cameraGateway.broadcastCameraStatusUpdate({
+            id,
+            availability: currentStatus,
+          });
+          this.logger.log(`Camera ${id} availability changed to ${currentStatus}`);
+        }
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to check MediaMTX availability: ${error.message}`,
+      );
+    }
+  }
+
   async getAllCamerasWithData() {
     return this.cameras.map((camera) => {
       const entity = this.cameraEntities.get(camera.id);
+      const id = camera.id.toString();
       return {
         ...camera,
-        id: camera.id.toString(),
+        id,
         name: entity?.name || `camera_${camera.id}`,
         type: camera.type,
-        availability: DeviceAvailabilityStatusEnum.AVAILABLE,
+        availability:
+          this.cameraAvailability.get(id) ||
+          DeviceAvailabilityStatusEnum.UNAVAILABLE,
         initialAzimuth: entity?.initialAzimuth,
         position: entity?.position,
+        hasThermal: camera.hasThermal(),
       };
     });
   }
 
   async getRecordings(id: string, start?: string, end?: string) {
-    const highPath = `${id}_high`;
-    const lowPath = `${id}_low`;
+    const camera = this.cameras.find((c) => c.id.toString() === id);
+    const hasThermal = camera?.hasThermal() || false;
 
-    let high = [];
-    try {
-      high = await this.mediamtxService.listRecordings(highPath, start, end);
-    } catch (error) {
-      this.logger.warn(`Could not fetch high recordings for ${id}`);
+    const paths = {
+      high: `${id}_high`,
+      low: `${id}_low`,
+      thermal_high: hasThermal ? `thermal_${id}_high` : null,
+      thermal_low: hasThermal ? `thermal_${id}_low` : null,
+    };
+
+    const results: any = {};
+
+    for (const [key, pathName] of Object.entries(paths)) {
+      if (!pathName) continue;
+      try {
+        results[key] = await this.mediamtxService.listRecordings(
+          pathName,
+          start,
+          end,
+        );
+      } catch (error) {
+        this.logger.warn(`Could not fetch ${key} recordings for ${id}`);
+        results[key] = [];
+      }
     }
 
-    let low = [];
-    try {
-      low = await this.mediamtxService.listRecordings(lowPath, start, end);
-    } catch (error) {
-      this.logger.warn(`Could not fetch low recordings for ${id}`);
-    }
-
-    return { high, low };
+    return results;
   }
 }

@@ -5,3 +5,4 @@ export { default as RotateMeansButton } from './RotateMeansButton';
 export { default as ScanFaceMeansButton } from './ScanFaceMeansButton';
 export { default as SwitchMeansButton } from './SwitchMeansButton';
 export { ReplayMeansButton } from './ReplayMeansButton';
+export { default as ThermalMeansButton } from './ThermalMeansButton';

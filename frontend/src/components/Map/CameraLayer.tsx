@@ -54,7 +54,7 @@ export const CameraLayer = () => {
           source: CAMERA_SOURCE,
           paint: {
             'circle-radius': 10,
-            'circle-color': '#808080',
+            'circle-color': '#ffffffff',
           },
         });
 
@@ -80,7 +80,7 @@ export const CameraLayer = () => {
           source: CAMERA_SOURCE,
           paint: {
             'circle-radius': 3,
-            'circle-color': '#808080',
+            'circle-color': '#ffffffff',
           },
         });
 
@@ -154,7 +154,7 @@ export const CameraLayer = () => {
               availability: c.availability || 'AVAILABLE',
             },
           }));
-        
+
         source.setData({
           type: 'FeatureCollection',
           features,

@@ -94,17 +94,43 @@ const StreamOptionsList = ({ options, onPick }: StreamOptionsListProps) => {
 
   return (
     <>
-      {options.map((item, index) => (
-        <UnstyledButton
-          key={`${item.id}-${index}`}
-          className={meansStreamSelectorStyles.customOption}
-          onClick={() => onPick(item.id)}
-        >
-          <span className={meansStreamSelectorStyles.customOptionLabel} title={item.name}>
-            {item.name}
-          </span>
-        </UnstyledButton>
-      ))}
+      {options.map((item, index) => {
+        const isDisconnected = item.availability === 'UNAVAILABLE';
+        return (
+          <UnstyledButton
+            key={`${item.id}-${index}`}
+            className={meansStreamSelectorStyles.customOption}
+            onClick={isDisconnected ? undefined : () => onPick(item.id)}
+            style={{
+              opacity: isDisconnected ? 0.5 : 1,
+              pointerEvents: isDisconnected ? 'none' : 'auto',
+              cursor: isDisconnected ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <span
+              className={meansStreamSelectorStyles.customOptionLabel}
+              title={item.name}
+            >
+              {item.name}
+            </span>
+            {isDisconnected && (
+              <span
+                style={{
+                  fontSize: '9px',
+                  color: 'red',
+                  fontWeight: 'bold',
+                  marginRight: '8px',
+                }}
+              >
+                מנותק
+              </span>
+            )}
+          </UnstyledButton>
+        );
+      })}
     </>
   );
 };
