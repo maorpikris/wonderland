@@ -1,12 +1,12 @@
 import { Box, Popover } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Video } from 'lucide-react';
+import { SwitchCameraIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useCameras } from '@hooks/useCameras';
 import { useVideoGridSelectionStore } from '@stores/useVideoGridSelection';
-import { 
-  filterCamerasBySearch, 
-  StreamPickerDropdown 
+import {
+  filterCamerasBySearch,
+  StreamPickerDropdown,
 } from '@components/VideoGrid/MeansStreamSelector/MeansStreamSelector';
 import { meansStreamSelectorStyles } from '@components/VideoGrid/MeansStreamSelector/MeansStreamSelector.css';
 import MeansActionButton from './MeansActionButton';
@@ -16,15 +16,20 @@ type SwitchMeansButtonProps = {
   onPopOverToggle: (opened: boolean) => void;
 };
 
-const SwitchMeansButton = ({ slotIndex, onPopOverToggle }: SwitchMeansButtonProps) => {
+const SwitchMeansButton = ({
+  slotIndex,
+  onPopOverToggle,
+}: SwitchMeansButtonProps) => {
   const [opened, { close, toggle }] = useDisclosure(false, {
     onOpen: () => onPopOverToggle(true),
     onClose: () => onPopOverToggle(false),
   });
   const [search, setSearch] = useState('');
-  
+
   const { data: cameras } = useCameras();
-  const setSlotCameraIndex = useVideoGridSelectionStore((s) => s.setSlotCameraIndex);
+  const setSlotCameraIndex = useVideoGridSelectionStore(
+    (s) => s.setSlotCameraIndex,
+  );
 
   const safeCameras = cameras ?? [];
   const filteredCameras = filterCamerasBySearch(safeCameras, search);
@@ -39,10 +44,10 @@ const SwitchMeansButton = ({ slotIndex, onPopOverToggle }: SwitchMeansButtonProp
   };
 
   return (
-    <Popover 
-      opened={opened} 
-      onClose={close} 
-      position="top" 
+    <Popover
+      opened={opened}
+      onClose={close}
+      position="top"
       offset={10}
       shadow="md"
       withinPortal={false}
@@ -53,21 +58,21 @@ const SwitchMeansButton = ({ slotIndex, onPopOverToggle }: SwitchMeansButtonProp
           backgroundColor: 'transparent',
           width: '240px',
           zIndex: 1000,
-        }
+        },
       }}
     >
       <Popover.Target>
         <div style={{ display: 'inline-block' }}>
           <MeansActionButton onClick={toggle}>
-            <Video size={15} />
+            <SwitchCameraIcon size={15} />
           </MeansActionButton>
         </div>
       </Popover.Target>
 
       <Popover.Dropdown>
-        <Box 
-          style={{ 
-            width: '240px', 
+        <Box
+          style={{
+            width: '240px',
             position: 'relative',
           }}
         >
@@ -77,10 +82,10 @@ const SwitchMeansButton = ({ slotIndex, onPopOverToggle }: SwitchMeansButtonProp
             options={filteredCameras}
             onPick={handlePick}
             className={meansStreamSelectorStyles.customDropdown}
-            style={{ 
-              position: 'static', 
+            style={{
+              position: 'static',
               marginTop: 0,
-              width: '100%' 
+              width: '100%',
             }}
           />
         </Box>

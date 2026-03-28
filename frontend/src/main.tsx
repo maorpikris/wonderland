@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { DirectionProvider, MantineProvider } from '@mantine/core';
 import { queryClient } from './lib/query-client';

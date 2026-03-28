@@ -18,9 +18,6 @@ const VideoGrid = ({ count = 3 }: VideoGridProps) => {
     (s) => s.setSlotCameraIndex,
   );
 
-  const replayTimeBySlot = useVideoGridSelectionStore((s) => s.replayTimeBySlot);
-  const setReplayTime = useVideoGridSelectionStore((s) => s.setReplayTime);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -44,10 +41,14 @@ const VideoGrid = ({ count = 3 }: VideoGridProps) => {
             {camera ? (
               <VideoTile
                 cameraId={camera.id}
-                replayTime={replayTimeBySlot[i]}
-                onReplayTimeChange={(time) => setReplayTime(i, time)}
                 streamUrl={`http://127.0.0.1:8889/${camera.id}_${i === 0 ? 'high' : 'low'}`}
-                bottomBarContent={({ toggleFullscreen, onPopOverToggle }) => (
+                bottomBarContent={({
+                  toggleFullscreen,
+                  onPopOverToggle,
+                }: {
+                  toggleFullscreen: () => void;
+                  onPopOverToggle: (opened: boolean) => void;
+                }) => (
                   <MeansActionBar
                     slotIndex={i}
                     cameraId={camera.id}

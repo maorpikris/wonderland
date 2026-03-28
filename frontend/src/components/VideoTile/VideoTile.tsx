@@ -11,13 +11,10 @@ import {
   videoTileBarTop,
 } from './VideoTile.css';
 import WebRtcVideo from '../WebRtcVideo/WebRtcVideo';
-import ReplayVideo from '../ReplayVideo/ReplayVideo';
 
 type VideoTileProps = {
   streamUrl: string;
   cameraId: string;
-  replayTime?: string | null;
-  onReplayTimeChange?: (time: string) => void;
   topBarContent?: ReactNode;
   bottomBarContent?:
     | ReactNode
@@ -29,9 +26,7 @@ type VideoTileProps = {
 
 const VideoTile = ({
   streamUrl,
-  cameraId,
-  replayTime,
-  onReplayTimeChange,
+  cameraId: _,
   topBarContent,
   bottomBarContent,
 }: VideoTileProps) => {
@@ -47,16 +42,7 @@ const VideoTile = ({
         fullscreen && 'is-fullscreen',
       )}
     >
-      {replayTime ? (
-        <ReplayVideo
-          cameraId={cameraId}
-          startTime={replayTime}
-          className={videoTileVideo}
-          onTimeUpdate={onReplayTimeChange}
-        />
-      ) : (
-        <WebRtcVideo className={videoTileVideo} streamUrl={streamUrl} />
-      )}
+      <WebRtcVideo className={videoTileVideo} streamUrl={streamUrl} />
 
       {topBarContent ? (
         <div

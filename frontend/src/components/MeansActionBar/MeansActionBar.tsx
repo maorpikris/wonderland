@@ -35,6 +35,7 @@ const MeansActionBar = ({
       />
       <ReplayMeansButton
         slotIndex={slotIndex}
+        cameraId={cameraId}
         onPopOverToggle={onPopOverToggle}
       />
       <FullscreenMeansButton toggleFullscreen={toggleFullscreen} />

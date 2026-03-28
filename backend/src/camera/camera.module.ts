@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CameraEntity } from './entities/camera.entity';
 import { CameraGateway } from './camera.gateway';
 import { ScheduleModule } from '@nestjs/schedule';
+import { StandalonePlaybackController } from '../playback/playback.controller';
+import { PlaybackService } from '../playback/playback.service';
 
 @Module({
   imports: [
@@ -14,8 +16,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     TypeOrmModule.forFeature([CameraEntity]),
     ScheduleModule.forRoot(),
   ],
-  controllers: [CameraController],
-  providers: [CameraService, MediaMTXService, CameraGateway],
+  controllers: [CameraController, StandalonePlaybackController],
+  providers: [CameraService, MediaMTXService, CameraGateway, PlaybackService],
   exports: [CameraService],
 })
 export class CameraModule {}
