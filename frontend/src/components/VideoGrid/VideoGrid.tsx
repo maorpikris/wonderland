@@ -18,6 +18,7 @@ const VideoGrid = ({ count = 3 }: VideoGridProps) => {
     (s) => s.setSlotCameraIndex,
   );
   const isThermalBySlot = useVideoGridSelectionStore((s) => s.isThermalBySlot);
+  const isLowResBySlot = useVideoGridSelectionStore((s) => s.isLowResBySlot);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -42,7 +43,7 @@ const VideoGrid = ({ count = 3 }: VideoGridProps) => {
             {camera ? (
               <VideoTile
                 cameraId={camera.id}
-                streamUrl={`http://127.0.0.1:8889/${(camera.hasThermal && isThermalBySlot[i]) ? 'thermal_' : ''}${camera.id}_${i === 0 ? 'high' : 'low'}`}
+                streamUrl={`http://127.0.0.1:8889/${(camera.hasThermal && isThermalBySlot[i]) ? 'thermal_' : ''}${camera.id}_${(isLowResBySlot[i] ?? (i !== 0)) ? 'low' : 'high'}`}
                 bottomBarContent={({
                   toggleFullscreen,
                   onPopOverToggle,

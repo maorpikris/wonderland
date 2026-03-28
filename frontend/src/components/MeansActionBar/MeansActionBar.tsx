@@ -5,6 +5,7 @@ import {
   SwitchMeansButton,
   ReplayMeansButton,
   ThermalMeansButton,
+  ResolutionMeansButton,
 } from './components';
 import { useCameras } from '@hooks/useCameras';
 
@@ -50,6 +51,12 @@ const MeansActionBar = ({
         onPopOverToggle={onPopOverToggle}
       />
       {hasThermal && <ThermalMeansButton slotIndex={slotIndex} />}
+      {slotIndex === 0 && (
+        <ResolutionMeansButton
+          slotIndex={slotIndex}
+          onPopOverToggle={onPopOverToggle}
+        />
+      )}
     </Flex>
   );
 };
