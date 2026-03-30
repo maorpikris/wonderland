@@ -26,9 +26,13 @@ const MapView = () => {
 
   // Spot Modal State
   const [spotModalOpened, setSpotModalOpened] = useState(false);
-  const [spotModalMode, setSpotModalMode] = useState<'create' | 'edit'>('create');
+  const [spotModalMode, setSpotModalMode] = useState<'create' | 'edit'>(
+    'create',
+  );
   const [selectedSpotId, setSelectedSpotId] = useState<number | undefined>();
-  const [clickLngLat, setClickLngLat] = useState<{ lng: number; lat: number } | undefined>();
+  const [clickLngLat, setClickLngLat] = useState<
+    { lng: number; lat: number } | undefined
+  >();
 
   const openCreateSpot = () => {
     const lngLat = useMapContextMenu.getState().lngLat;
@@ -59,7 +63,7 @@ const MapView = () => {
           mapproxy: {
             type: 'raster',
             tiles: [
-              'http://localhost:8081/mapproxy/wmts/ortophoto/webmercator/{z}/{x}/{y}.png',
+              'http://localhost:8081/wmts/ortophoto/webmercator/{z}/{x}/{y}.png',
             ],
             tileSize: 256,
           },

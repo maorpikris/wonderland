@@ -15,7 +15,7 @@ caches:
     cache:
       type: geopackage
       filename: /mapproxy/maps/orto.gpkg
-      table_name: ortophoto_israel_2025
+      table_name: O_united_w84geo_Jun16_Jul23_gpkg_17
 
   ortophoto_3857:
     grids: [webmercator]
