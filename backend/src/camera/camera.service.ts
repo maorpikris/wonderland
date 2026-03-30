@@ -136,12 +136,12 @@ export class CameraService implements OnModuleInit {
     return this.cameras.map((c) => c.id.toString());
   }
 
-  async moveCamera(id: string, pan: number, tilt: number, zoom: number) {
+  async moveCamera(id: string, pan: number, tilt: number, zoom: number, isThermal: boolean = false) {
     const camera = this.cameras.find((c) => c.id.toString() === id);
     if (!camera) {
       throw new Error(`Camera with ID ${id} not found`);
     }
-    camera.handleMoveRequest(pan, tilt, zoom);
+    camera.handleMoveRequest(pan, tilt, zoom, isThermal);
   }
 
   async stopCamera(id: string) {

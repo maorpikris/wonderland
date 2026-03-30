@@ -20,20 +20,19 @@ import { ptzStyles } from './PTZControl.css';
 
 type PTZControlProps = {
   cameraId: string;
+  isThermal: boolean;
 };
 
-type PTZAction = (id: string) => Promise<any>;
-
-const PTZControl = ({ cameraId }: PTZControlProps) => {
+const PTZControl = ({ cameraId, isThermal }: PTZControlProps) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAction = (action: PTZAction) => {
+  const startAction = (action: (id: string, isThermal?: boolean) => Promise<any>) => {
     // Initial call
-    action(cameraId);
+    action(cameraId, isThermal);
     
     // Start interval
     intervalRef.current = setInterval(() => {
-      action(cameraId);
+      action(cameraId, isThermal);
     }, 500);
   };
 
@@ -56,7 +55,7 @@ const PTZControl = ({ cameraId }: PTZControlProps) => {
     gridArea 
   }: { 
     icon: any, 
-    action: PTZAction, 
+    action: (id: string, isThermal?: boolean) => Promise<any>, 
     gridArea?: string 
   }) => (
     <UnstyledButton

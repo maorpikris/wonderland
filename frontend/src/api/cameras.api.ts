@@ -9,12 +9,12 @@ export const getCameras = async (): Promise<Camera[]> => {
   return response.data;
 };
 
-export const moveUp = (id: string) => axios.post(`${backendUrl}/cameras/${id}/move-up`);
-export const moveDown = (id: string) => axios.post(`${backendUrl}/cameras/${id}/move-down`);
-export const rotateLeft = (id: string) => axios.post(`${backendUrl}/cameras/${id}/rotate-left`);
-export const rotateRight = (id: string) => axios.post(`${backendUrl}/cameras/${id}/rotate-right`);
-export const zoomIn = (id: string) => axios.post(`${backendUrl}/cameras/${id}/zoom-in`);
-export const zoomOut = (id: string) => axios.post(`${backendUrl}/cameras/${id}/zoom-out`);
+export const moveUp = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/move-up${isThermal ? '?isThermal=true' : ''}`);
+export const moveDown = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/move-down${isThermal ? '?isThermal=true' : ''}`);
+export const rotateLeft = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/rotate-left${isThermal ? '?isThermal=true' : ''}`);
+export const rotateRight = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/rotate-right${isThermal ? '?isThermal=true' : ''}`);
+export const zoomIn = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/zoom-in${isThermal ? '?isThermal=true' : ''}`);
+export const zoomOut = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/zoom-out${isThermal ? '?isThermal=true' : ''}`);
 
 export const updateCamera = (id: string, data: Partial<Camera>) =>
   axios.patch(`${backendUrl}/cameras/${id}`, data);

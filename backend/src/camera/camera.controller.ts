@@ -49,49 +49,49 @@ export class CameraController {
 
   @Post('/:id/move-up')
   @ApiOperation({ summary: 'move camera up' })
-  async moveUp(@Param('id') id: string) {
-    this.logger.log(`Moving camera ${id} up...`);
-    await this.cameraService.moveCamera(id, 0, 1, 0);
+  async moveUp(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+    this.logger.log(`Moving camera ${id} up (isThermal: ${isThermal})...`);
+    await this.cameraService.moveCamera(id, 0, 1, 0, isThermal === 'true');
     return { success: true };
   }
 
   @Post('/:id/move-down')
   @ApiOperation({ summary: 'move camera down' })
-  async moveDown(@Param('id') id: string) {
-    this.logger.log(`Moving camera ${id} down...`);
-    await this.cameraService.moveCamera(id, 0, -1, 0);
+  async moveDown(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+    this.logger.log(`Moving camera ${id} down (isThermal: ${isThermal})...`);
+    await this.cameraService.moveCamera(id, 0, -1, 0, isThermal === 'true');
     return { success: true };
   }
 
   @Post('/:id/rotate-left')
   @ApiOperation({ summary: 'rotate camera left' })
-  async rotateLeft(@Param('id') id: string) {
-    this.logger.log(`Rotating camera ${id} left...`);
-    await this.cameraService.moveCamera(id, -1, 0, 0);
+  async rotateLeft(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+    this.logger.log(`Rotating camera ${id} left (isThermal: ${isThermal})...`);
+    await this.cameraService.moveCamera(id, -1, 0, 0, isThermal === 'true');
     return { success: true };
   }
 
   @Post('/:id/rotate-right')
   @ApiOperation({ summary: 'rotate camera right' })
-  async rotateRight(@Param('id') id: string) {
-    this.logger.log(`Rotating camera ${id} right...`);
-    await this.cameraService.moveCamera(id, 1, 0, 0);
+  async rotateRight(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+    this.logger.log(`Rotating camera ${id} right (isThermal: ${isThermal})...`);
+    await this.cameraService.moveCamera(id, 1, 0, 0, isThermal === 'true');
     return { success: true };
   }
 
   @Post('/:id/zoom-in')
   @ApiOperation({ summary: 'zoom in camera' })
-  async zoomIn(@Param('id') id: string) {
-    this.logger.log(`Zooming camera ${id} in...`);
-    await this.cameraService.moveCamera(id, 0, 0, 1);
+  async zoomIn(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+    this.logger.log(`Zooming camera ${id} in (isThermal: ${isThermal})...`);
+    await this.cameraService.moveCamera(id, 0, 0, 1, isThermal === 'true');
     return { success: true };
   }
 
   @Post('/:id/zoom-out')
   @ApiOperation({ summary: 'zoom out camera' })
-  async zoomOut(@Param('id') id: string) {
-    this.logger.log(`Zooming camera ${id} out...`);
-    await this.cameraService.moveCamera(id, 0, 0, -1);
+  async zoomOut(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+    this.logger.log(`Zooming camera ${id} out (isThermal: ${isThermal})...`);
+    await this.cameraService.moveCamera(id, 0, 0, -1, isThermal === 'true');
     return { success: true };
   }
 

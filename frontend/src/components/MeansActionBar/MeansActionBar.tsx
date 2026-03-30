@@ -8,6 +8,7 @@ import {
   ResolutionMeansButton,
 } from './components';
 import { useCameras } from '@hooks/useCameras';
+import { useVideoGridSelectionStore } from '@stores/useVideoGridSelection';
 
 type MeansActionBarProps = {
   slotIndex: number;
@@ -25,6 +26,9 @@ const MeansActionBar = ({
   const { data: cameras } = useCameras();
   const camera = cameras?.find((c) => c.id === cameraId);
   const hasThermal = camera?.hasThermal || false;
+  const isThermal = useVideoGridSelectionStore(
+    (s) => s.isThermalBySlot[slotIndex] || false,
+  );
 
   return (
     <Flex
@@ -38,6 +42,7 @@ const MeansActionBar = ({
     >
       <ControlMeansButton
         cameraId={cameraId}
+        isThermal={isThermal}
         onPopOverToggle={onPopOverToggle}
       />
       <ReplayMeansButton

@@ -6,10 +6,10 @@ import PTZControl from './PTZControl/PTZControl';
 
 type ControlMeansButtonProps = {
   cameraId: string;
+  isThermal: boolean;
   onPopOverToggle: (opened: boolean) => void;
 };
-
-const ControlMeansButton = ({ cameraId, onPopOverToggle }: ControlMeansButtonProps) => {
+const ControlMeansButton = ({ cameraId, isThermal, onPopOverToggle }: ControlMeansButtonProps) => {
   const [opened, { close, toggle }] = useDisclosure(false, {
     onOpen: () => onPopOverToggle(true),
     onClose: () => onPopOverToggle(false),
@@ -41,7 +41,7 @@ const ControlMeansButton = ({ cameraId, onPopOverToggle }: ControlMeansButtonPro
       </Popover.Target>
 
       <Popover.Dropdown>
-        <PTZControl cameraId={cameraId} />
+        <PTZControl cameraId={cameraId} isThermal={isThermal} />
       </Popover.Dropdown>
     </Popover>
   );
