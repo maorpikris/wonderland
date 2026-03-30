@@ -58,16 +58,17 @@ export const SpotLayer = ({ onSpotClick }: SpotLayerProps) => {
         label.style.top = '-30px';
         label.style.left = '50%';
         label.style.transform = 'translateX(-50%)';
-        label.style.background = 'rgba(20, 31, 50, 0.75)';
+        label.style.background = 'rgba(20, 31, 50, 0.4)';
         label.style.color = 'white';
         label.style.padding = '2px 8px';
         label.style.borderRadius = '6px';
         label.style.fontSize = '12px';
         label.style.fontWeight = '700';
         label.style.whiteSpace = 'nowrap';
+        label.style.fontWeight = 'bold';
         label.style.pointerEvents = 'none';
         label.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-        label.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
+        label.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
 
         el.appendChild(label);
 

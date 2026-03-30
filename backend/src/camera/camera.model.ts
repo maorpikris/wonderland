@@ -1,5 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { CameraType } from '@/enum/enums';
+import { calculateFOV } from './utils';
+
 // @ts-ignore
 import * as onvif from 'onvif';
 
@@ -137,11 +139,17 @@ export abstract class BaseCamera implements Camera {
     }
   }
 
-  async getPTZStatus(): Promise<{ pan: number; zoom: number } | null> {
-    if (!this.onvifCam) return null;
+  protected getProfileToken() {
     const profileToken =
       this.onvifCam.activeSource?.profileToken ||
       this.onvifCam.profiles[0]?.['$']?.token;
+
+    return profileToken;
+  }
+
+  async getPTZStatus(): Promise<{ pan: number; zoom: number } | null> {
+    if (!this.onvifCam) return null;
+    const profileToken = this.getProfileToken();
 
     if (!profileToken) {
       this.logger.warn(`No active ONVIF profile found for camera ${this.id}`);
@@ -154,8 +162,7 @@ export abstract class BaseCamera implements Camera {
           this.logger.error(
             `Failed to get status for camera ${this.id}: ${err.message}. Triggering reconnection...`,
           );
-          this.onvifCam = null;
-          this.initOnvif();
+
           return resolve(null);
         }
 
@@ -196,7 +203,6 @@ export abstract class BaseCamera implements Camera {
   }
 }
 
-import { calculateFOV } from './utils';
 export class SimplePtzCamera extends BaseCamera {
   getHighResSource(): string {
     return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif`;
@@ -213,16 +219,16 @@ export class SimplePtzCamera extends BaseCamera {
 
 export class ThermalPtzCamera extends BaseCamera {
   getHighResSource(): string {
-    return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif`;
+    return `rtsp://${this.username}:${this.password}@${this.ip}:554/Stream/Live/101?transportmode=unicast&profile=ONFProfileToken_101`;
   }
 
   getLowResSource(): string {
-    return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif`;
+    return `rtsp://${this.username}:${this.password}@${this.ip}:554/Stream/Live/102?transportmode=unicast&profile=ONFProfileToken_102`;
   }
 
   calculateFOV(zoom: number): number {
     // Thermal camera often have different lenses and FOV parameters
-    return calculateFOV(zoom, 3.2, 7.5, 7.5, 1); // Mocked values for thermal
+    return calculateFOV(zoom, 4.8, 4.7, 94.0, 30, 1, 0);
   }
 
   hasThermal(): boolean {
@@ -230,11 +236,17 @@ export class ThermalPtzCamera extends BaseCamera {
   }
 
   getThermalHighResSource(): string {
-    return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=2&subtype=0&unicast=true&proto=Onvif`;
+    return `rtsp://${this.username}:${this.password}@${this.ip}:554/Stream/Live/201?transportmode=unicast&profile=ONFProfileToken_201`;
   }
 
   getThermalLowResSource(): string {
-    return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=2&subtype=1&unicast=true&proto=Onvif`;
+    return `rtsp://${this.username}:${this.password}@${this.ip}:554/Stream/Live/202?transportmode=unicast&profile=ONFProfileToken_202`;
+  }
+
+  protected getProfileToken() {
+    const profileToken = 'ONFProfileToken_101';
+
+    return profileToken;
   }
 
   move(pan: number, tilt: number, zoom: number): void {
@@ -256,8 +268,8 @@ export class ThermalPtzCamera extends BaseCamera {
 
       const body: any = {
         profileToken,
-        x: pan,
-        y: tilt,
+        x: pan / 3,
+        y: tilt / 3,
         zoom: zoom,
       };
 

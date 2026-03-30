@@ -4,13 +4,21 @@ export function calculateFOV(
   minFocal: number = 4.7,
   maxOpticalFocal: number = 94.0,
   maxZoom: number = 30,
+  maxNormalizedValue: number = 1,
+  minNormalizedValue: number = -1,
 ): number {
   // 1. Clamp input to ensure it stays within -1 and 1
-  const z = Math.max(-1, Math.min(1, normalizedZoom));
+  const z = Math.max(
+    minNormalizedValue,
+    Math.min(maxNormalizedValue, normalizedZoom),
+  );
 
-  // 2. Map -1...1 range to a Total Magnification Factor of 1x...30x
-  // Formula: target = min + (input - start) * (max - min) / (end - start)
-  const totalMagnification = 1 + ((z + 1) * (maxZoom - 1)) / 2;
+  // 2. Map normalized range to a Total Magnification Factor of 1x...30x
+  // Formula: target = minZoom + (inputZoom - minNormalizedInput) * (maxZoom - minZoom) / (maxNormalizedInput - minNormalizedInput)
+  const totalMagnification =
+    1 +
+    ((z - minNormalizedValue) * (maxZoom - 1)) /
+      (maxNormalizedValue - minNormalizedValue);
 
   const opticalLimit = maxOpticalFocal / minFocal; // 20x
 

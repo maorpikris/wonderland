@@ -2,21 +2,21 @@
   {
     "id": 1,
     "type": "SIMPLE_PTZ",
-    "ip": "101.91.251.81",
+    "ip": "192.168.137.2",
     "username": "admin",
     "password": "123456"
   },
   {
     "id": 2,
-    "type": "THERMAL_PTZ",
-    "ip": "101.91.251.249",
+    "type": "SIMPLE_PTZ",
+    "ip": "192.168.137.2",
     "username": "admin",
-    "password": "admin123"
+    "password": "123456"
   },
   {
     "id": 3,
-    "type": "SIMPLE_PTZ",
-    "ip": "101.91.251.73",
+    "type": "THERMAL_PTZ",
+    "ip": "192.168.137.2",
     "username": "admin",
     "password": "123456"
   }
