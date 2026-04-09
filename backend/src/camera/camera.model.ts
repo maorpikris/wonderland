@@ -324,7 +324,9 @@ export class SimplePtzCamera extends BaseCamera {
       await axios.get(
         `http://${this.ip}/cgi-bin/set_ircut?ircutmode=3&uid=${uid}&time=${invertedMode}`,
       );
-      this.logger.log(`SimplePtzCamera ${this.id}: Successfully set mode to ${mode} (sent ${invertedMode} to camera)`);
+      this.logger.log(
+        `SimplePtzCamera ${this.id}: Successfully set mode to ${mode} (sent ${invertedMode} to camera)`,
+      );
     } catch (error: any) {
       this.logger.error(
         `SimplePtzCamera ${this.id}: Failed to set day/night mode: ${error.message}`,
@@ -338,6 +340,10 @@ export class SimplePtzCamera extends BaseCamera {
 
   getLowResSource(): string {
     return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif`;
+  }
+
+  protected getVideoSourceToken(isThermal: boolean = false): string | null {
+    return 'VideoSourceMain';
   }
 
   async getPTZStatus(): Promise<{ pan: number; zoom: number } | null> {
