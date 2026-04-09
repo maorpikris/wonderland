@@ -297,6 +297,20 @@ export class SimplePtzCamera extends BaseCamera {
     return `rtsp://${this.username}:${this.password}@${this.ip}:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif`;
   }
 
+  async getPTZStatus(): Promise<{ pan: number; zoom: number } | null> {
+    const status = await super.getPTZStatus();
+    if (!status) return null;
+
+    // We invert the pan value for SimplePtzCamera because it reports an absolute 
+    // pan status that is opposite to the standard geographic rotation. 
+    // Inverting it ensures that panning Right (positive speed) results in 
+    // an increasing azimuth (Clockwise) on the map.
+    return {
+      ...status,
+      pan: -status.pan,
+    };
+  }
+
   calculateFOV(zoom: number): number {
     return calculateFOV(zoom, 4.8, 4.7, 94.0, 30);
   }
