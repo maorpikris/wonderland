@@ -9,10 +9,10 @@ export const getCameras = async (): Promise<Camera[]> => {
   return response.data;
 };
 
-export const moveUp = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/move-up${isThermal ? '?isThermal=true' : ''}`);
-export const moveDown = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/move-down${isThermal ? '?isThermal=true' : ''}`);
-export const rotateLeft = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/rotate-left${isThermal ? '?isThermal=true' : ''}`);
-export const rotateRight = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/rotate-right${isThermal ? '?isThermal=true' : ''}`);
+export const moveUp = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/move-up?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
+export const moveDown = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/move-down?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
+export const rotateLeft = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/rotate-left?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
+export const rotateRight = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/rotate-right?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
 export const zoomIn = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/zoom-in${isThermal ? '?isThermal=true' : ''}`);
 export const zoomOut = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/zoom-out${isThermal ? '?isThermal=true' : ''}`);
 

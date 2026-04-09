@@ -18,7 +18,13 @@ export interface Camera {
   getThermalLowResSource(): string;
   hasThermal(): boolean;
   initOnvif(): Promise<void>;
-  handleMoveRequest(pan: number, tilt: number, zoom: number, isThermal?: boolean): void;
+  handleMoveRequest(
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal?: boolean,
+    sensitivity?: number,
+  ): void;
   getPTZStatus(): Promise<{ pan: number; zoom: number } | null>;
   calculateFOV(zoom: number): number;
   stop(): void;
@@ -95,8 +101,14 @@ export abstract class BaseCamera implements Camera {
     });
   }
 
-  handleMoveRequest(pan: number, tilt: number, zoom: number, isThermal: boolean = false): void {
-    this.move(pan, tilt, zoom, isThermal);
+  handleMoveRequest(
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal: boolean = false,
+    sensitivity: number = 1.0,
+  ): void {
+    this.move(pan, tilt, zoom, isThermal, sensitivity);
     if (this.moveTimeout) {
       clearTimeout(this.moveTimeout);
     }
@@ -105,7 +117,13 @@ export abstract class BaseCamera implements Camera {
     }, 500);
   }
 
-  protected move(pan: number, tilt: number, zoom: number, isThermal: boolean = false): void {
+  protected move(
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal: boolean = false,
+    sensitivity: number = 1.0,
+  ): void {
     if (!this.onvifCam) {
       this.logger.warn(
         `Cannot handle move request: ONVIF not initialized for camera ${this.id}`,
@@ -123,8 +141,8 @@ export abstract class BaseCamera implements Camera {
       }
       const body = {
         profileToken,
-        x: pan,
-        y: tilt,
+        x: pan * sensitivity,
+        y: tilt * sensitivity,
         zoom: zoom,
       };
 
@@ -249,7 +267,13 @@ export class ThermalPtzCamera extends BaseCamera {
     return profileToken;
   }
 
-  move(pan: number, tilt: number, zoom: number, isThermal: boolean = false): void {
+  move(
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal: boolean = false,
+    sensitivity: number = 1.0,
+  ): void {
     if (!this.onvifCam) {
       this.logger.warn(
         `Cannot handle move request: ONVIF not initialized for camera ${this.id}`,
@@ -258,12 +282,14 @@ export class ThermalPtzCamera extends BaseCamera {
     }
 
     try {
-      const profileToken = isThermal ? 'ONFProfileToken_201' : 'ONFProfileToken_101';
-      
+      const profileToken = isThermal
+        ? 'ONFProfileToken_201'
+        : 'ONFProfileToken_101';
+
       const body: any = {
         profileToken,
-        x: pan / 3,
-        y: tilt / 3,
+        x: pan * sensitivity,
+        y: tilt * sensitivity,
         zoom: zoom,
       };
 

@@ -1,4 +1,4 @@
-import { Box, UnstyledButton } from '@mantine/core';
+import { Box, UnstyledButton, Slider, Text } from '@mantine/core';
 import { 
   CaretUp, 
   CaretDown, 
@@ -7,7 +7,7 @@ import {
   Plus, 
   Minus 
 } from '@phosphor-icons/react';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { 
   moveUp, 
   moveDown, 
@@ -25,14 +25,19 @@ type PTZControlProps = {
 
 const PTZControl = ({ cameraId, isThermal }: PTZControlProps) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [sensitivity, setSensitivity] = useState(5);
 
-  const startAction = (action: (id: string, isThermal?: boolean) => Promise<any>) => {
+  const startAction = (action: (id: string, isThermal?: boolean, sensitivity?: number) => Promise<any>) => {
+    // Only apply sensitivity to pan/tilt actions, not zoom
+    const isZoomAction = action === zoomIn || action === zoomOut;
+    const s = isZoomAction ? undefined : sensitivity / 10;
+    
     // Initial call
-    action(cameraId, isThermal);
+    action(cameraId, isThermal, s);
     
     // Start interval
     intervalRef.current = setInterval(() => {
-      action(cameraId, isThermal);
+      action(cameraId, isThermal, s);
     }, 500);
   };
 
@@ -55,7 +60,7 @@ const PTZControl = ({ cameraId, isThermal }: PTZControlProps) => {
     gridArea 
   }: { 
     icon: any, 
-    action: (id: string, isThermal?: boolean) => Promise<any>, 
+    action: (id: string, isThermal?: boolean, sensitivity?: number) => Promise<any>, 
     gridArea?: string 
   }) => (
     <UnstyledButton
@@ -95,6 +100,21 @@ const PTZControl = ({ cameraId, isThermal }: PTZControlProps) => {
         >
           <Minus size={14} weight="bold" />
         </UnstyledButton>
+      </Box>
+
+      <Box className={ptzStyles.sensitivityContainer}>
+        <Text className={ptzStyles.sensitivityLabel}>
+          מהירות: {sensitivity}
+        </Text>
+        <Slider
+          value={sensitivity}
+          onChange={setSensitivity}
+          min={1}
+          max={10}
+          step={1}
+          label={null}
+          classNames={ptzStyles.slider}
+        />
       </Box>
     </Box>
   );

@@ -69,4 +69,46 @@ export const ptzStyles = {
       color: colors.accentContrast,
     },
   }),
+  
+  sensitivityContainer: style({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: space.spacing1,
+    marginTop: space.spacing2,
+    padding: `0 ${space.spacing1}`,
+  }),
+
+  sensitivityLabel: style({
+    color: colors.textPrimary,
+    fontSize: typography.fontSize1,
+    fontWeight: typography.fontWeightMedium,
+    textTransform: 'uppercase',
+    letterSpacing: typography.letterSpacing1,
+    opacity: 0.6,
+  }),
+
+  slider: {
+    root: style({
+      width: '100%',
+    }),
+    track: style({
+      height: '4px',
+      backgroundColor: colors.neutralAlpha3,
+    }),
+    bar: style({
+      backgroundColor: colors.accent8,
+    }),
+    thumb: style({
+      width: '12px',
+      height: '12px',
+      backgroundColor: colors.accent8,
+      border: `2px solid ${colors.accentContrast}`,
+      boxShadow: `0 0 10px ${colors.accent8}`,
+      transition: 'transform 100ms ease',
+      ':hover': {
+        transform: 'scale(1.2)',
+      },
+    }),
+  },
 };
