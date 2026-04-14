@@ -33,6 +33,7 @@ export class MediaMTXService {
     this.baseUrl =
       this.configService.get<string>('MEDIAMTX_API_URL') ??
       'http://localhost:9997';
+    this.logger.log(`MediaMTX API base URL: ${this.baseUrl}`);
   }
 
   async addPath(config: MediaMTXPathConfig): Promise<void> {
@@ -45,7 +46,8 @@ export class MediaMTXService {
       recordFormat: config.recordFormat ?? 'fmp4',
       recordPartDuration: config.recordPartDuration ?? '10s',
       recordSegmentDuration: config.recordSegmentDuration ?? '10m',
-      recordDeleteAfter: config.recordDeleteAfter ?? '10d',
+      // Older MediaMTX builds reject "d" suffix; "240h" is equivalent to 10 days.
+      recordDeleteAfter: config.recordDeleteAfter ?? '240h',
       playback: true,
     };
 
@@ -81,7 +83,7 @@ export class MediaMTXService {
       }
 
       this.logger.error(
-        `Failed to register path ${config.name}: ${error.message}`,
+        `Failed to register path ${config.name}: ${error.response?.data?.error ?? error.message}`,
         error.stack,
       );
       throw error;

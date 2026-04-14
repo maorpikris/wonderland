@@ -237,7 +237,7 @@ export class CameraService implements OnModuleInit {
 
       for (const camera of this.cameras) {
         const id = camera.id.toString();
-        const lowResPathName = `${id}_low`;
+        const lowResPathName = `${id}/low`;
         const pathInfo = pathItems.find((p: any) => p.name === lowResPathName);
 
         const currentStatus =
@@ -290,10 +290,10 @@ export class CameraService implements OnModuleInit {
     const hasThermal = camera?.hasThermal() || false;
 
     const paths = {
-      high: `${id}_high`,
-      low: `${id}_low`,
-      thermal_high: hasThermal ? `thermal_${id}_high` : null,
-      thermal_low: hasThermal ? `thermal_${id}_low` : null,
+      high: `${id}/high`,
+      low: `${id}/low`,
+      thermal_high: hasThermal ? `thermal_${id}/high` : null,
+      thermal_low: hasThermal ? `thermal_${id}/low` : null,
     };
 
     const results: any = {};
