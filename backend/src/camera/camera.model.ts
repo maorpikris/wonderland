@@ -463,6 +463,7 @@ export const CameraFactory = {
           json.username,
           json.password,
           json.onvifPort,
+          json.videoPort,
         );
       case CameraType.THERMAL_PTZ:
         return new ThermalPtzCamera(
@@ -472,6 +473,7 @@ export const CameraFactory = {
           json.username,
           json.password,
           json.onvifPort,
+          json.videoPort,
         );
       default:
         throw new Error(`Unknown camera type: ${json.type}`);
