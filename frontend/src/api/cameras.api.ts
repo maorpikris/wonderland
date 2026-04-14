@@ -9,15 +9,52 @@ export const getCameras = async (): Promise<Camera[]> => {
   return response.data;
 };
 
-export const moveUp = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/move-up?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
-export const moveDown = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/move-down?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
-export const rotateLeft = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/rotate-left?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
-export const rotateRight = (id: string, isThermal?: boolean, sensitivity?: number) => axios.post(`${backendUrl}/cameras/${id}/rotate-right?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`);
-export const zoomIn = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/zoom-in${isThermal ? '?isThermal=true' : ''}`);
-export const zoomOut = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/zoom-out${isThermal ? '?isThermal=true' : ''}`);
-export const focusIn = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/focus-in${isThermal ? '?isThermal=true' : ''}`);
-export const focusOut = (id: string, isThermal?: boolean) => axios.post(`${backendUrl}/cameras/${id}/focus-out${isThermal ? '?isThermal=true' : ''}`);
-export const setCameraDayNightMode = (id: string, mode: 'day' | 'night') => axios.post(`${backendUrl}/cameras/${id}/day-night-mode`, { mode });
+export const moveUp = (id: string, isThermal?: boolean, sensitivity?: number) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/move-up?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`,
+  );
+export const moveDown = (
+  id: string,
+  isThermal?: boolean,
+  sensitivity?: number,
+) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/move-down?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`,
+  );
+export const rotateLeft = (
+  id: string,
+  isThermal?: boolean,
+  sensitivity?: number,
+) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/rotate-left?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`,
+  );
+export const rotateRight = (
+  id: string,
+  isThermal?: boolean,
+  sensitivity?: number,
+) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/rotate-right?${new URLSearchParams({ ...(isThermal && { isThermal: 'true' }), ...(sensitivity && { sensitivity: sensitivity.toString() }) }).toString()}`,
+  );
+export const zoomIn = (id: string, isThermal?: boolean) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/zoom-in${isThermal ? '?isThermal=true' : ''}`,
+  );
+export const zoomOut = (id: string, isThermal?: boolean) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/zoom-out${isThermal ? '?isThermal=true' : ''}`,
+  );
+export const focusIn = (id: string, isThermal?: boolean) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/focus-in${isThermal ? '?isThermal=true' : ''}`,
+  );
+export const focusOut = (id: string, isThermal?: boolean) =>
+  axios.post(
+    `${backendUrl}/cameras/${id}/focus-out${isThermal ? '?isThermal=true' : ''}`,
+  );
+export const setCameraDayNightMode = (id: string, mode: 'day' | 'night') =>
+  axios.post(`${backendUrl}/cameras/${id}/day-night-mode`, { mode });
 
 export const updateCamera = (id: string, data: Partial<Camera>) =>
   axios.patch(`${backendUrl}/cameras/${id}`, data);

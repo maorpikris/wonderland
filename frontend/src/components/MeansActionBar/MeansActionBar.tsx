@@ -25,7 +25,10 @@ const MeansActionBar = ({
 }: MeansActionBarProps) => {
   const { data: cameras } = useCameras();
   const camera = cameras?.find((c) => c.id === cameraId);
-  const supportsDayNight = camera?.hasThermal || camera?.dayNightModeStrategy === 'api' || camera?.dayNightModeStrategy === 'stream';
+  const supportsDayNight =
+    camera?.hasThermal ||
+    camera?.dayNightModeStrategy === 'api' ||
+    camera?.dayNightModeStrategy === 'stream';
   const isThermal = useVideoGridSelectionStore(
     (s) => s.isThermalBySlot[slotIndex] || false,
   );
@@ -55,7 +58,9 @@ const MeansActionBar = ({
         slotIndex={slotIndex}
         onPopOverToggle={onPopOverToggle}
       />
-      {supportsDayNight && <ThermalMeansButton slotIndex={slotIndex} cameraId={cameraId} />}
+      {supportsDayNight && (
+        <ThermalMeansButton slotIndex={slotIndex} cameraId={cameraId} />
+      )}
       {slotIndex === 0 && (
         <ResolutionMeansButton
           slotIndex={slotIndex}

@@ -3,7 +3,10 @@ import { Popover, Radio, Tooltip, UnstyledButton } from '@mantine/core';
 import { ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
 import * as styles from './DevicesGridDropdown.css';
-import { useMainPageLayoutStore, type DevicesAmount } from '../../../../../stores/useMainPageLayout';
+import {
+  useMainPageLayoutStore,
+  type DevicesAmount,
+} from '../../../../../stores/useMainPageLayout';
 
 type GridOptionProps = {
   label: string;
@@ -82,7 +85,7 @@ export const DevicesGridDropdown = ({ disabled }: DevicesGridDropdownProps) => {
           classNames={{
             tooltip: styles.tooltip,
           }}
-          styles={{tooltip: {fontSize: '12px'}}}
+          styles={{ tooltip: { fontSize: '12px' } }}
         >
           <span>
             <UnstyledButton
@@ -96,14 +99,9 @@ export const DevicesGridDropdown = ({ disabled }: DevicesGridDropdownProps) => {
             >
               <ChevronDown
                 size={16}
-                className={clsx(
-                  styles.chevron, 
-                  opened && styles.chevronOpen
-                )}
+                className={clsx(styles.chevron, opened && styles.chevronOpen)}
               />
-              <span className={styles.triggerText}>
-                {devicesAmount} אמצעים
-              </span>
+              <span className={styles.triggerText}>{devicesAmount} אמצעים</span>
             </UnstyledButton>
           </span>
         </Tooltip>

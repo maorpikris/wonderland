@@ -123,7 +123,7 @@ export const ptzStyles = {
     fontWeight: 700,
     letterSpacing: '0.05em',
   }),
-  
+
   sensitivityContainer: style({
     width: '100%',
     display: 'flex',

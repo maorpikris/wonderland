@@ -1,2 +1,2 @@
-export * from './VideoGrid'
-export * from './MeansStreamSelector'
+export * from './VideoGrid';
+export * from './MeansStreamSelector';

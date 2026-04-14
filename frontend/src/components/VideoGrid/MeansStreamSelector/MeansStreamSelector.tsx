@@ -18,9 +18,7 @@ export const filterCamerasBySearch = (
   search: string,
 ): Camera[] => {
   const query = search.trim().toLowerCase();
-  return cameras.filter((camera) =>
-    camera.name.toLowerCase().includes(query),
-  );
+  return cameras.filter((camera) => camera.name.toLowerCase().includes(query));
 };
 
 type AddStreamColumnProps = {
@@ -153,7 +151,10 @@ export const StreamPickerDropdown = ({
   style,
 }: StreamPickerDropdownProps) => {
   return (
-    <Box className={className ?? meansStreamSelectorStyles.customDropdown} style={style}>
+    <Box
+      className={className ?? meansStreamSelectorStyles.customDropdown}
+      style={style}
+    >
       <StreamSearchField value={search} onChange={onSearchChange} />
       <MeansStreamListScroll>
         <Box className={meansStreamSelectorStyles.customOptionsContainer}>

@@ -242,4 +242,3 @@ export const meansStreamSelectorStyles = {
     fontSize: typography.fontSize2,
   }),
 };
-

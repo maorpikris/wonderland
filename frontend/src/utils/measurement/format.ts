@@ -19,5 +19,4 @@ export const formatAzimuth = (degrees: number): string =>
 export const formatSegmentLabel = (
   meters: number,
   azimuthDeg: number,
-): string =>
-  `${formatMeasurementPreview(meters)} ${formatAzimuth(azimuthDeg)}`;
+): string => `${formatMeasurementPreview(meters)} ${formatAzimuth(azimuthDeg)}`;

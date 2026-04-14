@@ -1,4 +1,13 @@
-import { Modal, TextInput, NumberInput, Group, Button, Stack, ActionIcon, Tooltip } from '@mantine/core';
+import {
+  Modal,
+  TextInput,
+  NumberInput,
+  Group,
+  Button,
+  Stack,
+  ActionIcon,
+  Tooltip,
+} from '@mantine/core';
 import { MapPin } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import type { Camera } from '@src/types';
@@ -26,7 +35,10 @@ export function CameraEditModal({ camera, opened, onClose }: Props) {
       setName(camera.name);
       setAzimuth(camera.initialAzimuth || 0);
       if (camera.position) {
-        const utm = wgs84ToUtm(camera.position.coordinates[0], camera.position.coordinates[1]);
+        const utm = wgs84ToUtm(
+          camera.position.coordinates[0],
+          camera.position.coordinates[1],
+        );
         setEasting(utm.easting);
         setNorthing(utm.northing);
       } else {
@@ -44,7 +56,7 @@ export function CameraEditModal({ camera, opened, onClose }: Props) {
 
   const handleSave = () => {
     if (!camera) return;
-    
+
     let position = camera.position;
     if (easting !== undefined && northing !== undefined) {
       const wgs = utmToWgs84(easting, northing);
@@ -54,16 +66,19 @@ export function CameraEditModal({ camera, opened, onClose }: Props) {
       };
     }
 
-    updateCamera.mutate({
-      id: camera.id,
-      data: {
-        name,
-        initialAzimuth: azimuth,
-        position,
+    updateCamera.mutate(
+      {
+        id: camera.id,
+        data: {
+          name,
+          initialAzimuth: azimuth,
+          position,
+        },
       },
-    }, {
-      onSuccess: onClose
-    });
+      {
+        onSuccess: onClose,
+      },
+    );
   };
 
   const handlePickFromMap = () => {
@@ -77,7 +92,14 @@ export function CameraEditModal({ camera, opened, onClose }: Props) {
   };
 
   return (
-    <Modal opened={opened && !isHidden} onClose={onClose} title="עריכת מצלמה" centered size="md" dir="rtl">
+    <Modal
+      opened={opened && !isHidden}
+      onClose={onClose}
+      title="עריכת מצלמה"
+      centered
+      size="md"
+      dir="rtl"
+    >
       <Stack>
         <TextInput
           label="שם המצלמה"
@@ -93,24 +115,37 @@ export function CameraEditModal({ camera, opened, onClose }: Props) {
           <NumberInput
             label="Easting (UTM)"
             value={easting}
-            onChange={(val) => setEasting(typeof val === 'number' ? val : undefined)}
+            onChange={(val) =>
+              setEasting(typeof val === 'number' ? val : undefined)
+            }
             style={{ flex: 1 }}
           />
           <NumberInput
             label="Northing (UTM)"
             value={northing}
-            onChange={(val) => setNorthing(typeof val === 'number' ? val : undefined)}
+            onChange={(val) =>
+              setNorthing(typeof val === 'number' ? val : undefined)
+            }
             style={{ flex: 1 }}
           />
           <Tooltip label="בחר מהמפה">
-            <ActionIcon size={36} variant="light" color="blue" onClick={handlePickFromMap}>
+            <ActionIcon
+              size={36}
+              variant="light"
+              color="blue"
+              onClick={handlePickFromMap}
+            >
               <MapPin size={24} />
             </ActionIcon>
           </Tooltip>
         </Group>
         <Group justify="flex-end" mt="md">
-          <Button variant="light" onClick={onClose} color="gray">ביטול</Button>
-          <Button onClick={handleSave} loading={updateCamera.isPending}>שמירה</Button>
+          <Button variant="light" onClick={onClose} color="gray">
+            ביטול
+          </Button>
+          <Button onClick={handleSave} loading={updateCamera.isPending}>
+            שמירה
+          </Button>
         </Group>
       </Stack>
     </Modal>

@@ -9,7 +9,10 @@ type ThermalMeansButtonProps = {
   cameraId: string;
 };
 
-const ThermalMeansButton = ({ slotIndex, cameraId }: ThermalMeansButtonProps) => {
+const ThermalMeansButton = ({
+  slotIndex,
+  cameraId,
+}: ThermalMeansButtonProps) => {
   const { data: cameras } = useCameras();
   const camera = cameras?.find((c) => c.id === cameraId);
   const isThermal = useVideoGridSelectionStore(
@@ -20,7 +23,7 @@ const ThermalMeansButton = ({ slotIndex, cameraId }: ThermalMeansButtonProps) =>
   const handleToggle = async () => {
     const isCurrentlyNight = isThermal; // isThermal acts as "is night" here
     const newMode = isCurrentlyNight ? 'day' : 'night';
-    
+
     if (camera?.dayNightModeStrategy === 'api') {
       try {
         await setCameraDayNightMode(cameraId, newMode);
@@ -28,7 +31,7 @@ const ThermalMeansButton = ({ slotIndex, cameraId }: ThermalMeansButtonProps) =>
         console.error('Failed to set day/night mode via API', error);
       }
     }
-    
+
     toggleThermal(slotIndex);
   };
 

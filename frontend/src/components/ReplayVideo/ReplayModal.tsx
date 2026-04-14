@@ -220,7 +220,9 @@ export const ReplayModal = ({
                                       )}
                                       <Badge
                                         size="xs"
-                                        color={seg.isThermal ? 'grape' : 'yellow'}
+                                        color={
+                                          seg.isThermal ? 'grape' : 'yellow'
+                                        }
                                         variant="filled"
                                       >
                                         {seg.isThermal ? 'תרמי' : 'יום'}
@@ -292,8 +294,7 @@ export const ReplayModal = ({
                 >
                   <Badge color="dark" variant="filled" opacity={0.7} size="lg">
                     {dayjs(activeRecording.start).format('DD/MM/YYYY HH:mm:ss')}{' '}
-                    (
-                    {activeRecording.isThermal ? 'Thermal' : 'Day'}
+                    ({activeRecording.isThermal ? 'Thermal' : 'Day'}
                     {' - '}
                     {activeRecording.quality === 'high'
                       ? 'High Res'

@@ -142,7 +142,12 @@ export const CameraLayer = () => {
 
       if (fovSource) {
         const fovFeatures = cameras
-          .filter((c) => c.position && cameraUpdates[c.id] && c.availability === 'AVAILABLE')
+          .filter(
+            (c) =>
+              c.position &&
+              cameraUpdates[c.id] &&
+              c.availability === 'AVAILABLE',
+          )
           .map((c) => {
             const update = cameraUpdates[c.id];
             return {
@@ -180,8 +185,12 @@ export const CameraLayer = () => {
         const isAvailable = (camera as any).availability === 'AVAILABLE';
 
         const getLabelStyle = () => ({
-          background: isAvailable ? 'rgba(0, 120, 50, 0.75)' : 'rgba(180, 20, 20, 0.75)',
-          border: isAvailable ? '1px solid rgba(100, 255, 100, 0.4)' : '1px solid rgba(255, 100, 100, 0.4)',
+          background: isAvailable
+            ? 'rgba(0, 120, 50, 0.75)'
+            : 'rgba(180, 20, 20, 0.75)',
+          border: isAvailable
+            ? '1px solid rgba(100, 255, 100, 0.4)'
+            : '1px solid rgba(255, 100, 100, 0.4)',
         });
 
         if (!labelMarkersRef.current[id]) {
@@ -199,7 +208,7 @@ export const CameraLayer = () => {
           el.style.pointerEvents = 'none';
           el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
           el.style.position = 'absolute';
-          el.style.top = '-40px'; 
+          el.style.top = '-40px';
           el.style.left = '50%';
           el.style.transform = 'translateX(-50%)';
 
@@ -212,7 +221,8 @@ export const CameraLayer = () => {
           labelMarkersRef.current[id] = marker;
         } else {
           labelMarkersRef.current[id].setLngLat([lng, lat]);
-          const el = labelMarkersRef.current[id].getElement().firstChild as HTMLDivElement;
+          const el = labelMarkersRef.current[id].getElement()
+            .firstChild as HTMLDivElement;
           if (el) {
             el.innerText = camera.name;
             const style = getLabelStyle();

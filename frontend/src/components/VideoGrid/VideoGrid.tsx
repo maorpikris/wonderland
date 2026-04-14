@@ -43,7 +43,7 @@ const VideoGrid = ({ count = 3 }: VideoGridProps) => {
             {camera ? (
               <VideoTile
                 cameraId={camera.id}
-                streamUrl={`http://127.0.0.1:8889/${(camera.dayNightModeStrategy === 'stream' && isThermalBySlot[i]) ? 'thermal_' : ''}${camera.id}_${(isLowResBySlot[i] ?? (i !== 0)) ? 'low' : 'high'}`}
+                streamUrl={`http://127.0.0.1:8889/${camera.dayNightModeStrategy === 'stream' && isThermalBySlot[i] ? 'thermal_' : ''}${camera.id}_${(isLowResBySlot[i] ?? i !== 0) ? 'low' : 'high'}`}
                 bottomBarContent={({
                   toggleFullscreen,
                   onPopOverToggle,

@@ -1,6 +1,6 @@
 import { UnstyledButton } from '@mantine/core';
 import { Map, Video } from 'lucide-react';
-import * as styles from './LayoutToggle.css'
+import * as styles from './LayoutToggle.css';
 import {
   MainPageLayoutOptions,
   useMainPageLayoutStore,
@@ -15,7 +15,7 @@ export function LayoutToggle() {
   const isMap = currentLayout !== MainPageLayoutOptions.DEVICES;
 
   return (
-    <div className={styles.root} >
+    <div className={styles.root}>
       <UnstyledButton
         onClick={toggleMap}
         className={styles.segment}

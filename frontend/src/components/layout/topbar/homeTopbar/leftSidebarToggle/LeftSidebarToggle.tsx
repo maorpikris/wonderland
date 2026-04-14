@@ -15,12 +15,11 @@ export function LeftSidebarToggle() {
       onClick={toggleLeftSidebar}
       className={styles.root}
       data-open={isLeftSidebarOpen ? 'true' : undefined}
-      aria-label={isLeftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'}
+      aria-label={
+        isLeftSidebarOpen ? 'Close left sidebar' : 'Open left sidebar'
+      }
     >
-      <Icon
-        size={18}
-        className={styles.icon}
-      />
+      <Icon size={18} className={styles.icon} />
     </UnstyledButton>
   );
 }

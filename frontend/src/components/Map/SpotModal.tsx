@@ -1,6 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Modal, TextInput, ColorInput, Button, Group, Stack } from '@mantine/core';
-import { useCreateSpot, useUpdateSpot, useDeleteSpot, useSpots } from '../../hooks/useSpots';
+import {
+  Modal,
+  TextInput,
+  ColorInput,
+  Button,
+  Group,
+  Stack,
+} from '@mantine/core';
+import {
+  useCreateSpot,
+  useUpdateSpot,
+  useDeleteSpot,
+  useSpots,
+} from '../../hooks/useSpots';
 import type { Spot } from '../../types/spot.types';
 
 interface SpotModalProps {
@@ -11,9 +23,23 @@ interface SpotModalProps {
   spotId?: number;
 }
 
-const PRESET_COLORS = ['#228be6', '#40c057', '#fa5252', '#fab005', '#7950f2', '#e64980', '#fd7e14'];
+const PRESET_COLORS = [
+  '#228be6',
+  '#40c057',
+  '#fa5252',
+  '#fab005',
+  '#7950f2',
+  '#e64980',
+  '#fd7e14',
+];
 
-export const SpotModal = ({ opened, onClose, mode, lngLat, spotId }: SpotModalProps) => {
+export const SpotModal = ({
+  opened,
+  onClose,
+  mode,
+  lngLat,
+  spotId,
+}: SpotModalProps) => {
   const { data: spots } = useSpots();
   const createSpot = useCreateSpot();
   const updateSpot = useUpdateSpot();
@@ -83,7 +109,12 @@ export const SpotModal = ({ opened, onClose, mode, lngLat, spotId }: SpotModalPr
         />
         <Group justify="space-between" mt="md">
           {mode === 'edit' && (
-            <Button variant="outline" color="red" onClick={handleDelete} loading={deleteSpot.isPending}>
+            <Button
+              variant="outline"
+              color="red"
+              onClick={handleDelete}
+              loading={deleteSpot.isPending}
+            >
               מחק איתור
             </Button>
           )}
@@ -91,7 +122,11 @@ export const SpotModal = ({ opened, onClose, mode, lngLat, spotId }: SpotModalPr
             <Button variant="subtle" onClick={onClose}>
               ביטול
             </Button>
-            <Button onClick={handleSave} loading={createSpot.isPending || updateSpot.isPending} disabled={!name}>
+            <Button
+              onClick={handleSave}
+              loading={createSpot.isPending || updateSpot.isPending}
+              disabled={!name}
+            >
               {mode === 'create' ? 'הוסף איתור' : 'עדכן איתור'}
             </Button>
           </Group>

@@ -1,5 +1,5 @@
-import { style } from "@vanilla-extract/css";
-import { colors } from "../../../../../theme/tokens.css";
+import { style } from '@vanilla-extract/css';
+import { colors } from '../../../../../theme/tokens.css';
 
 export const optionRoot = style({
   height: 22,
@@ -102,4 +102,4 @@ export const tooltip = style({
   padding: '8px 12px',
   lineHeight: '14px',
   textAlign: 'center',
-})
+});

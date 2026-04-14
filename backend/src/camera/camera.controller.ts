@@ -50,58 +50,97 @@ export class CameraController {
   @Post('/:id/move-up')
   @ApiOperation({ summary: 'move camera up' })
   async moveUp(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Query('isThermal') isThermal?: string,
-    @Query('sensitivity') sensitivity?: string
+    @Query('sensitivity') sensitivity?: string,
   ) {
-    this.logger.log(`Moving camera ${id} up (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`);
+    this.logger.log(
+      `Moving camera ${id} up (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`,
+    );
     const sensitivityValue = sensitivity ? parseFloat(sensitivity) : 1.0;
-    await this.cameraService.moveCamera(id, 0, 1, 0, isThermal === 'true', sensitivityValue);
+    await this.cameraService.moveCamera(
+      id,
+      0,
+      1,
+      0,
+      isThermal === 'true',
+      sensitivityValue,
+    );
     return { success: true };
   }
 
   @Post('/:id/move-down')
   @ApiOperation({ summary: 'move camera down' })
   async moveDown(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Query('isThermal') isThermal?: string,
-    @Query('sensitivity') sensitivity?: string
+    @Query('sensitivity') sensitivity?: string,
   ) {
-    this.logger.log(`Moving camera ${id} down (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`);
+    this.logger.log(
+      `Moving camera ${id} down (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`,
+    );
     const sensitivityValue = sensitivity ? parseFloat(sensitivity) : 1.0;
-    await this.cameraService.moveCamera(id, 0, -1, 0, isThermal === 'true', sensitivityValue);
+    await this.cameraService.moveCamera(
+      id,
+      0,
+      -1,
+      0,
+      isThermal === 'true',
+      sensitivityValue,
+    );
     return { success: true };
   }
 
   @Post('/:id/rotate-left')
   @ApiOperation({ summary: 'rotate camera left' })
   async rotateLeft(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Query('isThermal') isThermal?: string,
-    @Query('sensitivity') sensitivity?: string
+    @Query('sensitivity') sensitivity?: string,
   ) {
-    this.logger.log(`Rotating camera ${id} left (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`);
+    this.logger.log(
+      `Rotating camera ${id} left (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`,
+    );
     const sensitivityValue = sensitivity ? parseFloat(sensitivity) : 1.0;
-    await this.cameraService.moveCamera(id, -1, 0, 0, isThermal === 'true', sensitivityValue);
+    await this.cameraService.moveCamera(
+      id,
+      -1,
+      0,
+      0,
+      isThermal === 'true',
+      sensitivityValue,
+    );
     return { success: true };
   }
 
   @Post('/:id/rotate-right')
   @ApiOperation({ summary: 'rotate camera right' })
   async rotateRight(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Query('isThermal') isThermal?: string,
-    @Query('sensitivity') sensitivity?: string
+    @Query('sensitivity') sensitivity?: string,
   ) {
-    this.logger.log(`Rotating camera ${id} right (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`);
+    this.logger.log(
+      `Rotating camera ${id} right (isThermal: ${isThermal}, sensitivity: ${sensitivity})...`,
+    );
     const sensitivityValue = sensitivity ? parseFloat(sensitivity) : 1.0;
-    await this.cameraService.moveCamera(id, 1, 0, 0, isThermal === 'true', sensitivityValue);
+    await this.cameraService.moveCamera(
+      id,
+      1,
+      0,
+      0,
+      isThermal === 'true',
+      sensitivityValue,
+    );
     return { success: true };
   }
 
   @Post('/:id/zoom-in')
   @ApiOperation({ summary: 'zoom in camera' })
-  async zoomIn(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+  async zoomIn(
+    @Param('id') id: string,
+    @Query('isThermal') isThermal?: string,
+  ) {
     this.logger.log(`Zooming camera ${id} in (isThermal: ${isThermal})...`);
     await this.cameraService.moveCamera(id, 0, 0, 1, isThermal === 'true');
     return { success: true };
@@ -109,7 +148,10 @@ export class CameraController {
 
   @Post('/:id/zoom-out')
   @ApiOperation({ summary: 'zoom out camera' })
-  async zoomOut(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+  async zoomOut(
+    @Param('id') id: string,
+    @Query('isThermal') isThermal?: string,
+  ) {
     this.logger.log(`Zooming camera ${id} out (isThermal: ${isThermal})...`);
     await this.cameraService.moveCamera(id, 0, 0, -1, isThermal === 'true');
     return { success: true };
@@ -117,7 +159,10 @@ export class CameraController {
 
   @Post('/:id/focus-in')
   @ApiOperation({ summary: 'focus in camera' })
-  async focusIn(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+  async focusIn(
+    @Param('id') id: string,
+    @Query('isThermal') isThermal?: string,
+  ) {
     this.logger.log(`Focusing camera ${id} in (isThermal: ${isThermal})...`);
     await this.cameraService.focusCamera(id, 1, isThermal === 'true');
     return { success: true };
@@ -125,7 +170,10 @@ export class CameraController {
 
   @Post('/:id/focus-out')
   @ApiOperation({ summary: 'focus out camera' })
-  async focusOut(@Param('id') id: string, @Query('isThermal') isThermal?: string) {
+  async focusOut(
+    @Param('id') id: string,
+    @Query('isThermal') isThermal?: string,
+  ) {
     this.logger.log(`Focusing camera ${id} out (isThermal: ${isThermal})...`);
     await this.cameraService.focusCamera(id, -1, isThermal === 'true');
     return { success: true };
@@ -135,7 +183,7 @@ export class CameraController {
   @ApiOperation({ summary: 'set day or night mode on the camera' })
   async setDayNightMode(
     @Param('id') id: string,
-    @Body('mode') mode: 'day' | 'night'
+    @Body('mode') mode: 'day' | 'night',
   ) {
     this.logger.log(`Changing day/night mode for camera ${id} to ${mode}...`);
     await this.cameraService.setCameraMode(id, mode);

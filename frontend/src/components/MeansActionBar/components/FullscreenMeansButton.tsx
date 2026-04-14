@@ -5,7 +5,9 @@ type FullscreenMeansButtonProps = {
   toggleFullscreen: () => void;
 };
 
-const FullscreenMeansButton = ({ toggleFullscreen }: FullscreenMeansButtonProps) => {
+const FullscreenMeansButton = ({
+  toggleFullscreen,
+}: FullscreenMeansButtonProps) => {
   return (
     <MeansActionButton onClick={toggleFullscreen}>
       <Fullscreen size={15} />

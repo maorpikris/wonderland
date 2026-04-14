@@ -16,7 +16,9 @@ export const MapContextMenu = ({ onMarkSpot }: MapContextMenuProps) => {
   const map = useMap();
   const { isOpen, lngLat, closeMenu } = useMapContextMenu();
   const { updateLocation, isUpdating } = useSelfLocation();
-  const [popupContainer, setPopupContainer] = useState<HTMLElement | null>(null);
+  const [popupContainer, setPopupContainer] = useState<HTMLElement | null>(
+    null,
+  );
   const popupRef = useRef<maplibregl.Popup | null>(null);
 
   useEffect(() => {
@@ -26,12 +28,12 @@ export const MapContextMenu = ({ onMarkSpot }: MapContextMenuProps) => {
       if (!popupRef.current) {
         const div = document.createElement('div');
         setPopupContainer(div);
-        
-        popupRef.current = new maplibregl.Popup({ 
-          closeButton: false, 
-          closeOnClick: true, 
+
+        popupRef.current = new maplibregl.Popup({
+          closeButton: false,
+          closeOnClick: true,
           maxWidth: '300px',
-          className: mapContextMenuStyles.popup
+          className: mapContextMenuStyles.popup,
         })
           .setLngLat([lngLat.lng, lngLat.lat])
           .setDOMContent(div)
@@ -100,6 +102,6 @@ export const MapContextMenu = ({ onMarkSpot }: MapContextMenuProps) => {
         </Button>
       </Stack>
     </Box>,
-    popupContainer
+    popupContainer,
   );
 };

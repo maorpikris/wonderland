@@ -24,7 +24,7 @@ export class PlaybackService {
       'http://localhost:9996';
     this.storageBaseUrl =
       this.configService.get<string>('STORAGE_BASE_URL') ||
-      'http://localhost:3000/static';
+      'http://localhost:3001/static';
     this.appBaseUrl = this.storageBaseUrl.replace('/static', '');
   }
 

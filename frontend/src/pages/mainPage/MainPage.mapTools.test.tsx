@@ -69,7 +69,10 @@ describe('MainPage map tools integration', () => {
     const toolbar = screen.getByRole('toolbar', { name: 'בחירת כלי מפה' });
 
     expect(toolbar).toBeInTheDocument();
-    expect(toolbar.parentElement).toHaveAttribute('data-tray-placement', 'center');
+    expect(toolbar.parentElement).toHaveAttribute(
+      'data-tray-placement',
+      'center',
+    );
     expect(screen.getByRole('button', { name: 'נקודה' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'קו' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'פוליגון' })).toBeInTheDocument();
@@ -98,7 +101,10 @@ describe('MainPage map tools integration', () => {
     const toolbar = screen.getByRole('toolbar', { name: 'בחירת כלי מפה' });
 
     expect(toolbar).toBeInTheDocument();
-    expect(toolbar.parentElement).toHaveAttribute('data-tray-placement', 'center');
+    expect(toolbar.parentElement).toHaveAttribute(
+      'data-tray-placement',
+      'center',
+    );
   });
 
   test('switching between mixed and map-only layouts keeps the tray open and preserves the selected tool', async () => {
@@ -123,7 +129,9 @@ describe('MainPage map tools integration', () => {
       'aria-expanded',
       'true',
     );
-    expect(screen.getByRole('toolbar', { name: 'בחירת כלי מפה' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('toolbar', { name: 'בחירת כלי מפה' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'פוליגון' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -139,7 +147,9 @@ describe('MainPage map tools integration', () => {
       'aria-expanded',
       'true',
     );
-    expect(screen.getByRole('toolbar', { name: 'בחירת כלי מפה' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('toolbar', { name: 'בחירת כלי מפה' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'פוליגון' })).toHaveAttribute(
       'aria-pressed',
       'true',

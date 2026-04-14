@@ -9,7 +9,11 @@ type ControlMeansButtonProps = {
   isThermal: boolean;
   onPopOverToggle: (opened: boolean) => void;
 };
-const ControlMeansButton = ({ cameraId, isThermal, onPopOverToggle }: ControlMeansButtonProps) => {
+const ControlMeansButton = ({
+  cameraId,
+  isThermal,
+  onPopOverToggle,
+}: ControlMeansButtonProps) => {
   const [opened, { close, toggle }] = useDisclosure(false, {
     onOpen: () => onPopOverToggle(true),
     onClose: () => onPopOverToggle(false),
@@ -29,7 +33,7 @@ const ControlMeansButton = ({ cameraId, isThermal, onPopOverToggle }: ControlMea
           border: 'none',
           backgroundColor: 'transparent',
           zIndex: 1000,
-        }
+        },
       }}
     >
       <Popover.Target>

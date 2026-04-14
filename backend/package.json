@@ -26,6 +26,7 @@
     "@nestjs/serve-static": "^5.0.4",
     "@nestjs/swagger": "^11.2.6",
     "@nestjs/typeorm": "^11.0.0",
+    "@nestjs/websockets": "^11.1.19",
     "@types/geojson": "^7946.0.16",
     "axios": "^1.13.6",
     "class-transformer": "^0.5.1",

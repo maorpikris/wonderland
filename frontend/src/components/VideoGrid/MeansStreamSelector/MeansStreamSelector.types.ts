@@ -1,4 +1,4 @@
-import type { Camera } from "@src/types";
+import type { Camera } from '@src/types';
 
 export interface MeansStreamSelectorProps {
   cameras: Camera[];

@@ -3,11 +3,11 @@ import type { VideoCount } from './VideoGrid.types';
 
 type CellPlacement = Pick<CSSProperties, 'gridColumn' | 'gridRow'>;
 
-/** 
+/**
  * Per-cell placement where the layout is not plain row-major auto placement.
- * 
+ *
  * @warning Tightly coupled to the grid templates defined in `VideoGrid.css.ts`.
- * Changing the `gridTemplateColumns` or `gridTemplateRows` in the CSS file 
+ * Changing the `gridTemplateColumns` or `gridTemplateRows` in the CSS file
  * could silently break these placements. Ensure both files are updated together.
  */
 export const videoGridCellPlacement: {

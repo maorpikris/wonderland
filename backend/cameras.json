@@ -2,22 +2,35 @@
   {
     "id": 1,
     "type": "SIMPLE_PTZ",
-    "ip": "101.91.251.81",
+    "ip": "95.35.29.145",
     "username": "admin",
-    "password": "123456"
+    "password": "Beitar11",
+    "onvifPort": "8000",
+    "videoPort": "554"
   },
   {
     "id": 2,
-    "type": "THERMAL_PTZ",
-    "ip": "101.91.251.249",
+    "type": "SIMPLE_PTZ",
+    "ip": "95.35.29.145",
     "username": "admin",
-    "password": "admin123"
+    "password": "Beitar11",
+    "onvifPort": "8001",
+    "videoPort": "555"
   },
   {
     "id": 3,
     "type": "SIMPLE_PTZ",
-    "ip": "101.91.251.73",
+    "ip": "95.35.28.119",
     "username": "admin",
-    "password": "123456"
+    "password": "Beitar11",
+    "onvifPort": "8000"
+  },
+  {
+    "id": 4,
+    "type": "SIMPLE_PTZ",
+    "ip": "95.35.26.255",
+    "username": "admin",
+    "password": "Beitar11",
+    "onvifPort": "8000"
   }
 ]

@@ -15,11 +15,12 @@ export const MeasurementPanel: React.FC = () => {
     (s) => s.completedMeasurementsCount,
   );
   const undoLastPoint = useMeasurementStore((s) => s.undoLastPoint);
-  const clearAllMeasurements = useMeasurementStore((s) => s.clearAllMeasurements);
+  const clearAllMeasurements = useMeasurementStore(
+    (s) => s.clearAllMeasurements,
+  );
 
   const disableWhileNotDrawing = !hasPoints;
-  const disableClear =
-    !hasPoints && completedMeasurementsCount === 0;
+  const disableClear = !hasPoints && completedMeasurementsCount === 0;
 
   if (!isActive) return null;
 

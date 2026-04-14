@@ -14,7 +14,7 @@ export const mapContextMenuStyles = {
     ':hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.05) !important',
     },
-  })
+  }),
 };
 
 globalStyle(`${mapContextMenuStyles.popup} .maplibregl-popup-content`, {
@@ -27,27 +27,51 @@ globalStyle(`${mapContextMenuStyles.popup} .maplibregl-popup-content`, {
   color: colors.textPrimary,
 });
 
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-bottom .maplibregl-popup-tip`, {
-  borderTopColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-top .maplibregl-popup-tip`, {
-  borderBottomColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-left .maplibregl-popup-tip`, {
-  borderRightColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-right .maplibregl-popup-tip`, {
-  borderLeftColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip`, {
-  borderTopColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip`, {
-  borderTopColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-top-left .maplibregl-popup-tip`, {
-  borderBottomColor: 'rgba(13, 21, 35, 0.96)',
-});
-globalStyle(`${mapContextMenuStyles.popup}.maplibregl-popup-anchor-top-right .maplibregl-popup-tip`, {
-  borderBottomColor: 'rgba(13, 21, 35, 0.96)',
-});
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-bottom .maplibregl-popup-tip`,
+  {
+    borderTopColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-top .maplibregl-popup-tip`,
+  {
+    borderBottomColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-left .maplibregl-popup-tip`,
+  {
+    borderRightColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-right .maplibregl-popup-tip`,
+  {
+    borderLeftColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip`,
+  {
+    borderTopColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip`,
+  {
+    borderTopColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-top-left .maplibregl-popup-tip`,
+  {
+    borderBottomColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);
+globalStyle(
+  `${mapContextMenuStyles.popup}.maplibregl-popup-anchor-top-right .maplibregl-popup-tip`,
+  {
+    borderBottomColor: 'rgba(13, 21, 35, 0.96)',
+  },
+);

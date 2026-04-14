@@ -117,7 +117,10 @@ const gridBase = style({
 });
 
 /** 2×2 tracks; count 3 overrides cell placement in TS. */
-const twoByTwoTracks = { gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr' };
+const twoByTwoTracks = {
+  gridTemplateColumns: '1fr 1fr',
+  gridTemplateRows: '1fr 1fr',
+};
 
 export const gridVariant = styleVariants({
   1: [gridBase, { gridTemplateColumns: '1fr', gridTemplateRows: '1fr' }],

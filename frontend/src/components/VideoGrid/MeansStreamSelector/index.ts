@@ -1,1 +1,1 @@
-export * from './MeansStreamSelector'
+export * from './MeansStreamSelector';

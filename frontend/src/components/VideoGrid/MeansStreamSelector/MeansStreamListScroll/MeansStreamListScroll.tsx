@@ -70,11 +70,7 @@ const MeansStreamListScroll = ({ children }: MeansStreamListScrollProps) => {
 
   return (
     <div className={styles.root} dir="ltr">
-      <div
-        ref={viewportRef}
-        className={styles.viewport}
-        onScroll={updateThumb}
-      >
+      <div ref={viewportRef} className={styles.viewport} onScroll={updateThumb}>
         <div dir="rtl" className={styles.content}>
           {children}
         </div>

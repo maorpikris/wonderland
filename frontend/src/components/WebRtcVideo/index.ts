@@ -1,1 +1,1 @@
-export * from './WebRtcVideo'
+export * from './WebRtcVideo';

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,6 +43,7 @@ export class CameraService implements OnModuleInit {
       const configPath = path.resolve(process.cwd(), 'cameras.json');
       const data = await fs.readFile(configPath, 'utf8');
       const jsonCameras = JSON.parse(data);
+      console.log('Loaded camera config:', jsonCameras);
       this.cameras = jsonCameras.map((json: any) =>
         CameraFactory.fromJSON(json),
       );
@@ -53,6 +57,7 @@ export class CameraService implements OnModuleInit {
           this.logger.log(
             `Camera ${camera.id} not found in DB, creating with default data...`,
           );
+
           const json = jsonCameras.find((j: any) => j.id === camera.id);
           entity = this.cameraRepository.create({
             id: camera.id,
@@ -62,6 +67,7 @@ export class CameraService implements OnModuleInit {
             username: json.username,
             password: json.password,
             onvifPort: json.onvifPort || 80,
+            videoPort: json.videoPort || 554,
           });
           await this.cameraRepository.save(entity);
         }
@@ -80,6 +86,8 @@ export class CameraService implements OnModuleInit {
       try {
         const highResPath = `${camera.id}_high`;
         const lowResPath = `${camera.id}_low`;
+
+        this.logger.log(camera.getThermalHighResSource());
 
         const recordingsPath =
           this.configService.get<string>('RECORDINGS_PATH') || '/recordings';
@@ -136,7 +144,14 @@ export class CameraService implements OnModuleInit {
     return this.cameras.map((c) => c.id.toString());
   }
 
-  async moveCamera(id: string, pan: number, tilt: number, zoom: number, isThermal: boolean = false, sensitivity: number = 1.0) {
+  async moveCamera(
+    id: string,
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal: boolean = false,
+    sensitivity: number = 1.0,
+  ) {
     const camera = this.cameras.find((c) => c.id.toString() === id);
     if (!camera) {
       throw new Error(`Camera with ID ${id} not found`);
@@ -240,7 +255,9 @@ export class CameraService implements OnModuleInit {
             id,
             availability: currentStatus,
           });
-          this.logger.log(`Camera ${id} availability changed to ${currentStatus}`);
+          this.logger.log(
+            `Camera ${id} availability changed to ${currentStatus}`,
+          );
         }
       }
     } catch (error) {

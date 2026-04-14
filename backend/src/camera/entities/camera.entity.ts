@@ -28,6 +28,9 @@ export class CameraEntity {
   @Column({ default: 80 })
   onvifPort: number;
 
+  @Column({ default: 554 })
+  videoPort: number;
+
   @Column({ type: 'float', nullable: true })
   initialAzimuth?: number;
 
