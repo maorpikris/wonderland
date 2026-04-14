@@ -5,8 +5,7 @@
     "ip": "95.35.29.145",
     "username": "admin",
     "password": "Beitar11",
-    "onvifPort": "8000",
-    "videoPort": "554"
+    "onvifPort": "8000"
   },
   {
     "id": 2,
