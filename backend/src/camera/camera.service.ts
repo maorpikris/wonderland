@@ -84,8 +84,8 @@ export class CameraService implements OnModuleInit {
   private async registerCamerasWithMediaMTX() {
     for (const camera of this.cameras) {
       try {
-        const highResPath = `${camera.id}_high`;
-        const lowResPath = `${camera.id}_low`;
+        const highResPath = `${camera.id}/high`;
+        const lowResPath = `${camera.id}/low`;
 
         this.logger.log(camera.getThermalHighResSource());
 
@@ -109,8 +109,8 @@ export class CameraService implements OnModuleInit {
         });
 
         if (camera.hasThermal()) {
-          const thermalHighResPath = `thermal_${camera.id}_high`;
-          const thermalLowResPath = `thermal_${camera.id}_low`;
+          const thermalHighResPath = `thermal_${camera.id}/high`;
+          const thermalLowResPath = `thermal_${camera.id}/low`;
 
           await this.mediamtxService.addPath({
             name: thermalHighResPath,
