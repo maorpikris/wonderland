@@ -87,8 +87,6 @@ export class CameraService implements OnModuleInit {
         const highResPath = `${camera.id}_high`;
         const lowResPath = `${camera.id}_low`;
 
-        this.logger.log(camera.getThermalHighResSource());
-
         const recordingsPath =
           this.configService.get<string>('RECORDINGS_PATH') || '/recordings';
 
