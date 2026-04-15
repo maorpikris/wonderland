@@ -22,6 +22,68 @@ export class CameraService implements OnModuleInit {
   private cameraAvailability: Map<string, DeviceAvailabilityStatusEnum> =
     new Map();
 
+  private shellSingleQuote(value: string): string {
+    return "'" + value.replace(/'/g, "'\"'\"'") + "'";
+  }
+
+  private buildH264TranscodeCommand(
+    sourceUrl: string,
+    targetPath: string,
+  ): string {
+    const ffmpegBin =
+      this.configService.get<string>('MEDIAMTX_FFMPEG_BIN') || 'ffmpeg';
+    const ffmpegPreset =
+      this.configService.get<string>('MEDIAMTX_FFMPEG_PRESET') || 'ultrafast';
+    const ffmpegThreads = this.configService.get<string>(
+      'MEDIAMTX_FFMPEG_THREADS',
+    );
+    const rtspBaseUrl = (
+      this.configService.get<string>('MEDIAMTX_RTSP_BASE_URL') ||
+      'rtsp://localhost:18554'
+    ).replace(/\/+$/, '');
+    const targetUrl = `${rtspBaseUrl}/${targetPath}`;
+
+    const commandParts = [
+      ffmpegBin,
+      '-nostdin',
+      '-hide_banner',
+      '-loglevel',
+      'warning',
+      '-fflags',
+      'nobuffer',
+      '-flags',
+      'low_delay',
+      '-rtsp_transport',
+      'tcp',
+      '-i',
+      this.shellSingleQuote(sourceUrl),
+      '-an',
+      '-c:v',
+      'libx264',
+      '-preset',
+      ffmpegPreset,
+      '-tune',
+      'zerolatency',
+      '-pix_fmt',
+      'yuv420p',
+      '-g',
+      '50',
+      '-keyint_min',
+      '50',
+      '-f',
+      'rtsp',
+      '-rtsp_transport',
+      'tcp',
+      this.shellSingleQuote(targetUrl),
+    ];
+
+    if (ffmpegThreads && ffmpegThreads.trim().length > 0) {
+      commandParts.splice(2, 0, '-threads', ffmpegThreads.trim());
+    }
+
+    return commandParts.join(' ');
+  }
+
   constructor(
     private readonly mediamtxService: MediaMTXService,
     private readonly cameraGateway: CameraGateway,
@@ -82,26 +144,66 @@ export class CameraService implements OnModuleInit {
   }
 
   private async registerCamerasWithMediaMTX() {
+    const forceH264Transcode =
+      this.configService
+        .get<string>('MEDIAMTX_FORCE_H264_TRANSCODE')
+        ?.toLowerCase() === 'true';
+    const forceH264LowStreams =
+      this.configService
+        .get<string>('MEDIAMTX_FORCE_H264_LOW_STREAMS')
+        ?.toLowerCase() === 'true';
+
+    if (forceH264Transcode) {
+      this.logger.warn(
+        'MEDIAMTX_FORCE_H264_TRANSCODE is enabled: high/low streams will be transcoded to H264 via ffmpeg.',
+      );
+    }
+    if (forceH264LowStreams) {
+      this.logger.warn(
+        'MEDIAMTX_FORCE_H264_LOW_STREAMS is enabled: low streams will reuse high stream sources for WebRTC compatibility.',
+      );
+    }
+    if (forceH264Transcode && forceH264LowStreams) {
+      this.logger.warn(
+        'MEDIAMTX_FORCE_H264_LOW_STREAMS is ignored while MEDIAMTX_FORCE_H264_TRANSCODE is enabled.',
+      );
+    }
+
     for (const camera of this.cameras) {
       try {
         const highResPath = `${camera.id}/high`;
         const lowResPath = `${camera.id}/low`;
+        const highResSource = camera.getHighResSource();
+        const lowResSource =
+          forceH264Transcode || !forceH264LowStreams
+            ? camera.getLowResSource()
+            : highResSource;
 
         const recordingsPath =
           this.configService.get<string>('RECORDINGS_PATH') || '/recordings';
 
         await this.mediamtxService.addPath({
           name: highResPath,
-          source: camera.getHighResSource(),
-          sourceOnDemand: true,
+          source: forceH264Transcode ? 'publisher' : highResSource,
+          sourceOnDemand: forceH264Transcode ? false : true,
+          runOnInit: undefined,
+          runOnInitRestart: false,
+          runOnDemand: forceH264Transcode
+            ? this.buildH264TranscodeCommand(highResSource, highResPath)
+            : undefined,
+          runOnDemandRestart: forceH264Transcode,
           record: true,
           recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
         });
 
         await this.mediamtxService.addPath({
           name: lowResPath,
-          source: camera.getLowResSource(),
+          source: forceH264Transcode ? 'publisher' : lowResSource,
           sourceOnDemand: false,
+          runOnInit: forceH264Transcode
+            ? this.buildH264TranscodeCommand(lowResSource, lowResPath)
+            : undefined,
+          runOnInitRestart: forceH264Transcode,
           record: true,
           recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
         });
@@ -109,19 +211,40 @@ export class CameraService implements OnModuleInit {
         if (camera.hasThermal()) {
           const thermalHighResPath = `thermal_${camera.id}/high`;
           const thermalLowResPath = `thermal_${camera.id}/low`;
+          const thermalHighResSource = camera.getThermalHighResSource();
+          const thermalLowResSource =
+            forceH264Transcode || !forceH264LowStreams
+              ? camera.getThermalLowResSource()
+              : thermalHighResSource;
 
           await this.mediamtxService.addPath({
             name: thermalHighResPath,
-            source: camera.getThermalHighResSource(),
-            sourceOnDemand: true,
+            source: forceH264Transcode ? 'publisher' : thermalHighResSource,
+            sourceOnDemand: forceH264Transcode ? false : true,
+            runOnInit: undefined,
+            runOnInitRestart: false,
+            runOnDemand: forceH264Transcode
+              ? this.buildH264TranscodeCommand(
+                  thermalHighResSource,
+                  thermalHighResPath,
+                )
+              : undefined,
+            runOnDemandRestart: forceH264Transcode,
             record: true,
             recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
           });
 
           await this.mediamtxService.addPath({
             name: thermalLowResPath,
-            source: camera.getThermalLowResSource(),
+            source: forceH264Transcode ? 'publisher' : thermalLowResSource,
             sourceOnDemand: false,
+            runOnInit: forceH264Transcode
+              ? this.buildH264TranscodeCommand(
+                  thermalLowResSource,
+                  thermalLowResPath,
+                )
+              : undefined,
+            runOnInitRestart: forceH264Transcode,
             record: true,
             recordPath: `${recordingsPath}/%path/%Y-%m-%d_%H-%M-%S-%f`,
           });
@@ -237,7 +360,7 @@ export class CameraService implements OnModuleInit {
 
       for (const camera of this.cameras) {
         const id = camera.id.toString();
-        const lowResPathName = `${id}_low`;
+        const lowResPathName = `${id}/low`;
         const pathInfo = pathItems.find((p: any) => p.name === lowResPathName);
 
         const currentStatus =
@@ -285,18 +408,22 @@ export class CameraService implements OnModuleInit {
     });
   }
 
-  async getRecordings(id: string, start?: string, end?: string) {
+  async getRecordings(
+    id: string,
+    start?: string,
+    end?: string,
+  ): Promise<Record<string, unknown>> {
     const camera = this.cameras.find((c) => c.id.toString() === id);
     const hasThermal = camera?.hasThermal() || false;
 
     const paths = {
-      high: `${id}_high`,
-      low: `${id}_low`,
-      thermal_high: hasThermal ? `thermal_${id}_high` : null,
-      thermal_low: hasThermal ? `thermal_${id}_low` : null,
+      high: `${id}/high`,
+      low: `${id}/low`,
+      thermal_high: hasThermal ? `thermal_${id}/high` : null,
+      thermal_low: hasThermal ? `thermal_${id}/low` : null,
     };
 
-    const results: any = {};
+    const results: Record<string, unknown> = {};
 
     for (const [key, pathName] of Object.entries(paths)) {
       if (!pathName) continue;
@@ -306,7 +433,7 @@ export class CameraService implements OnModuleInit {
           start,
           end,
         );
-      } catch (error) {
+      } catch {
         this.logger.warn(`Could not fetch ${key} recordings for ${id}`);
         results[key] = [];
       }
