@@ -36,8 +36,8 @@ export class PlaybackService {
     const endMs = new Date(end).getTime();
 
     try {
-      const highPath = `${cameraId}_high`;
-      const lowPath = `${cameraId}_low`;
+      const highPath = `${cameraId}/high`;
+      const lowPath = `${cameraId}/low`;
 
       const [highSegments, lowSegments] = await Promise.all([
         this.fetchSegmentsFromMediaMTX(highPath, start, end),
@@ -154,10 +154,10 @@ export class PlaybackService {
   }
 
   async listRecordings(cameraId: string, date: string) {
-    const highPath = `${cameraId}_high`;
-    const lowPath = `${cameraId}_low`;
-    const thermalHighPath = `thermal_${cameraId}_high`;
-    const thermalLowPath = `thermal_${cameraId}_low`;
+    const highPath = `${cameraId}/high`;
+    const lowPath = `${cameraId}/low`;
+    const thermalHighPath = `thermal_${cameraId}/high`;
+    const thermalLowPath = `thermal_${cameraId}/low`;
 
     const highDir = path.resolve(__dirname, '..', '..', '..', 'recordings', highPath);
     const lowDir = path.resolve(__dirname, '..', '..', '..', 'recordings', lowPath);

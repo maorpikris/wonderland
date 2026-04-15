@@ -223,7 +223,11 @@ export abstract class BaseCamera implements Camera {
     return this.onvifCam.videoSources[0]?.['$']?.token || null;
   }
 
-  async getPTZStatus(): Promise<{ pan: number; zoom: number } | null> {
+  async getPTZStatus(): Promise<{
+    pan: number;
+    tilt: number;
+    zoom: number;
+  } | null> {
     if (!this.onvifCam) return null;
     const profileToken = this.getProfileToken();
 
@@ -247,6 +251,7 @@ export abstract class BaseCamera implements Camera {
 
         resolve({
           pan: position.x ?? 0,
+          tilt: position.y ?? 0,
           zoom: position.zoom ?? 0,
         });
       });
@@ -348,7 +353,11 @@ export class SimplePtzCamera extends BaseCamera {
     return 'VideoSourceMain';
   }
 
-  async getPTZStatus(): Promise<{ pan: number; zoom: number } | null> {
+  async getPTZStatus(): Promise<{
+    pan: number;
+    tilt: number;
+    zoom: number;
+  } | null> {
     const status = await super.getPTZStatus();
     if (!status) return null;
 
@@ -359,6 +368,7 @@ export class SimplePtzCamera extends BaseCamera {
     return {
       ...status,
       pan: -status.pan,
+      tilt: -status.tilt,
     };
   }
 
@@ -463,6 +473,7 @@ export const CameraFactory = {
           json.username,
           json.password,
           json.onvifPort,
+          json.videoPort,
         );
       case CameraType.THERMAL_PTZ:
         return new ThermalPtzCamera(
@@ -472,6 +483,7 @@ export const CameraFactory = {
           json.username,
           json.password,
           json.onvifPort,
+          json.videoPort,
         );
       default:
         throw new Error(`Unknown camera type: ${json.type}`);
