@@ -13,7 +13,7 @@ services:
       restart: unless-stopped
       command: >
         mapproxy-util serve-develop /mapproxy/mapproxy.yml -b 0.0.0.0:8081
-      
+
   postgres:
     image: postgis/postgis:16-3.4
     container_name: magenim-postgres
@@ -28,6 +28,11 @@ services:
     networks:
       - magenim-net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d wonderland"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   mediamtx:
     image: bluenviron/mediamtx:latest
@@ -44,6 +49,68 @@ services:
     volumes:
       - ./mediamtx/mediamtx.yml:/mediamtx.yml:ro
       - ./recordings:/recordings
+    networks:
+      - magenim-net
+    restart: unless-stopped
+
+  migrations:
+    image: postgis/postgis:16-3.4
+    container_name: magenim-migrations
+    environment:
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGUSER: admin
+      PGPASSWORD: admin
+      PGDATABASE: wonderland
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - magenim-net
+    entrypoint: >
+      sh -c "echo 'Database is ready. No pending migrations.' && exit 0"
+    restart: "no"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: magenim-backend
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_NAME: wonderland
+      MEDIAMTX_API_URL: http://mediamtx:9997
+      MEDIAMTX_PLAYBACK_URL: http://mediamtx:9996
+      MEDIAMTX_HLS_URL: http://mediamtx:8888
+      STORAGE_BASE_URL: http://localhost:3000/static
+      RECORDINGS_PATH: /recordings
+    volumes:
+      - ./recordings:/recordings
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+      mediamtx:
+        condition: service_started
+    networks:
+      - magenim-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_MAGENIM_BACKEND_URL: http://localhost:3000
+    container_name: magenim-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
     networks:
       - magenim-net
     restart: unless-stopped
