@@ -30,7 +30,13 @@ export interface Camera {
     sensitivity?: number,
   ): void;
   handleFocusRequest(speed: number, isThermal?: boolean): void;
-  getPTZStatus(): Promise<{ pan: number; zoom: number } | null>;
+  handleAbsoluteMoveRequest(
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal?: boolean,
+  ): void;
+  getPTZStatus(): Promise<{ pan: number; tilt: number; zoom: number } | null>;
   calculateFOV(zoom: number): number;
   stop(): void;
   stopFocus(isThermal?: boolean): void;
@@ -114,6 +120,45 @@ export abstract class BaseCamera implements Camera {
     });
   }
 
+  handleAbsoluteMoveRequest(
+    pan: number,
+    tilt: number,
+    zoom: number,
+    isThermal?: boolean,
+  ): void {
+    this.logger.log(
+      `Handling absolute move request for camera ${this.id}: pan=${pan}, tilt=${tilt}, zoom=${zoom}, isThermal=${isThermal}...`,
+    );
+    if (!this.onvifCam) {
+      this.logger.warn(
+        `Cannot handle move request: ONVIF not initialized for camera ${this.id}`,
+      );
+      return;
+    }
+
+    try {
+      const profileToken = this.getProfileToken(isThermal);
+      if (!profileToken) {
+        this.logger.warn(`No active ONVIF profile found for camera ${this.id}`);
+        return;
+      }
+      const body = {
+        profileToken,
+        x: pan,
+        y: tilt,
+        zoom,
+      };
+
+      this.onvifCam.absoluteMove(body);
+      this.logger.log(
+        `ONVIF absolute move request for camera ${this.id}: ${JSON.stringify(body)}`,
+      );
+    } catch (e: any) {
+      this.logger.error(
+        `ONVIF absolute move error on camera ${this.id}: ${e.message}`,
+      );
+    }
+  }
   handleMoveRequest(
     pan: number,
     tilt: number,

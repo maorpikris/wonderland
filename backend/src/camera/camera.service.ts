@@ -447,11 +447,7 @@ export class CameraService implements OnModuleInit {
     if (!camera) {
       throw new Error(`Camera with ID ${id} not found`);
     }
-    return {
-      horizontal: 5,
-      vertical: 5,
-      zoom: 5,
-    };
+    return camera.getPTZStatus();
   }
 
   getPositionForCamera(id: string) {
@@ -460,5 +456,13 @@ export class CameraService implements OnModuleInit {
       throw new Error(`Camera with ID ${id} not found`);
     }
     return camera.getPTZStatus();
+  }
+
+  moveCameraAbsolute(id: string, pan: number, tilt: number, zoom: number) {
+    const camera = this.cameras.find((c) => c.id.toString() === id);
+    if (!camera) {
+      throw new Error(`Camera with ID ${id} not found`);
+    }
+    camera.handleAbsoluteMoveRequest(pan, tilt, zoom);
   }
 }

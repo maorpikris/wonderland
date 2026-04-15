@@ -188,19 +188,20 @@ export class CameraController {
     this.logger.log(
       `Setting absolute position of camera ${id} to vertical: ${vertical}, horizontal: ${horizontal}, zoom: ${zoom}...`,
     );
-    await this.cameraService.moveCamera(id, horizontal, vertical, zoom);
+    await this.cameraService.moveCameraAbsolute(id, horizontal, vertical, zoom);
 
     return { success: true };
   }
 
-  @Post('/:id/absolute-position')
+  @Get('/:id/absolute-position')
   @ApiOperation({
     summary: 'get absolute position of camera (for PTZ cameras)',
   })
   async getAbsolutePosition(@Param('id') id: string) {
     const position = await this.cameraService.getCameraAbsolutePosition(id);
+    if (!position) return;
     this.logger.log(
-      `Getting absolute position of camera ${id}: vertical: ${position.vertical}, horizontal: ${position.horizontal}, zoom: ${position.zoom}...`,
+      `Getting absolute position of camera ${id}: vertical: ${position?.tilt}, horizontal: ${position?.pan}, zoom: ${position?.zoom}...`,
     );
 
     return position;
