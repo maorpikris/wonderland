@@ -314,4 +314,24 @@ export class CameraService implements OnModuleInit {
 
     return results;
   }
+
+  async getCameraAbsolutePosition(id: string) {
+    const camera = this.cameras.find((c) => c.id.toString() === id);
+    if (!camera) {
+      throw new Error(`Camera with ID ${id} not found`);
+    }
+    return {
+      horizontal: 5,
+      vertical: 5,
+      zoom: 5,
+    };
+  }
+
+  getPositionForCamera(id: string) {
+    const camera = this.cameras.find((c) => c.id.toString() === id);
+    if (!camera) {
+      throw new Error(`Camera with ID ${id} not found`);
+    }
+    return camera.getPTZStatus();
+  }
 }

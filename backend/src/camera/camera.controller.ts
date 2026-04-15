@@ -179,6 +179,33 @@ export class CameraController {
     return { success: true };
   }
 
+  @Post('/:id/absolute-position')
+  @ApiOperation({
+    summary: 'set absolute position of camera (for PTZ cameras)',
+  })
+  async setAbsolutePosition(@Param('id') id: string, @Body() position: any) {
+    const { vertical, horizontal, zoom } = position;
+    this.logger.log(
+      `Setting absolute position of camera ${id} to vertical: ${vertical}, horizontal: ${horizontal}, zoom: ${zoom}...`,
+    );
+    await this.cameraService.moveCamera(id, horizontal, vertical, zoom);
+
+    return { success: true };
+  }
+
+  @Post('/:id/absolute-position')
+  @ApiOperation({
+    summary: 'get absolute position of camera (for PTZ cameras)',
+  })
+  async getAbsolutePosition(@Param('id') id: string) {
+    const position = await this.cameraService.getCameraAbsolutePosition(id);
+    this.logger.log(
+      `Getting absolute position of camera ${id}: vertical: ${position.vertical}, horizontal: ${position.horizontal}, zoom: ${position.zoom}...`,
+    );
+
+    return position;
+  }
+
   @Post('/:id/day-night-mode')
   @ApiOperation({ summary: 'set day or night mode on the camera' })
   async setDayNightMode(
