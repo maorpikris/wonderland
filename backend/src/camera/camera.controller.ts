@@ -204,7 +204,11 @@ export class CameraController {
       `Getting absolute position of camera ${id}: vertical: ${position?.tilt}, horizontal: ${position?.pan}, zoom: ${position?.zoom}...`,
     );
 
-    return position;
+    return {
+      horizontal: -position.pan,
+      vertical: -position.tilt,
+      zoom: position.zoom,
+    };
   }
 
   @Post('/:id/day-night-mode')
